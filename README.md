@@ -28,7 +28,7 @@ Não há cadastro aberto: um e-mail fora de `EMAILS_PERMITIDOS` é recusado no e
 1. Crie o projeto no Supabase.
 2. `npx supabase link --project-ref <ref-do-projeto>`
 3. `npm run db:migrate` — cria o esquema, os índices, as políticas de RLS e o gatilho de bootstrap.
-4. Rode `supabase/seed.sql` (catálogo de conquistas). Pelo CLI: `npm run db:seed`; ou cole no SQL Editor.
+4. Rode `supabase/seed.sql` (catálogo de conquistas). Pelo CLI: `npm run db:seed`; ou cole no SQL Editor. Ele também sincroniza o catálogo com as contas que já existem, então pode rodar de novo sempre que o catálogo crescer.
 5. Em **Authentication → URL Configuration**, aponte *Site URL* para a URL do deploy e adicione `http://localhost:3000` em *Redirect URLs*.
 6. Faça o primeiro login. O gatilho `on_auth_user_created` cria a conta já configurada e **vazia**: três idiomas, cinco camadas, três marchas, divisão-alvo dos pilares, as metas do painel mensal e o estado inicial das conquistas.
 7. Só na conta principal: rode `supabase/seed_pessoal.sql` para aplicar níveis, vocabulário acumulado, metas por idioma, blocos do plano e o mapeamento do Toggl. É idempotente e não toca em nenhuma outra conta.

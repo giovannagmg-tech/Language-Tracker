@@ -69,3 +69,6 @@ on conflict (codigo) do update set
   repetivel = excluded.repetivel,
   janela_repeticao = excluded.janela_repeticao,
   ordem = excluded.ordem;
+
+-- Se já existem contas, garante que elas recebam as conquistas novas do catálogo.
+select public.sincronizar_conquistas(id) from auth.users;

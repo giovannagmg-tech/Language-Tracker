@@ -318,7 +318,8 @@ create table blocos_plano (
   foco_mes_nota text check (foco_mes_nota is null or char_length(foco_mes_nota) <= 200),
   criado_em timestamptz not null default now(),
   atualizado_em timestamptz not null default now(),
-  check (data_fim >= data_inicio)
+  check (data_fim >= data_inicio),
+  unique (user_id, nome)
 );
 create index blocos_user_periodo on blocos_plano (user_id, data_inicio);
 
@@ -632,13 +633,31 @@ begin
     (uid, 'conversacao', 'Minutos de fala por semana','min_fala_semana',  60, 'semana', 'semanal'),
     (uid, 'conversacao', 'Áudio no grupo',            'audio_semana',     1,  'semana', 'semanal');
 
-  -- estado inicial das conquistas
+  perform public.sincronizar_conquistas(uid);
+end;
+$$;
+
+-- Cria o estado que estiver faltando: na primeira vez, quando o catálogo cresce
+-- numa migração futura, e quando um idioma novo é adicionado. Idempotente.
+create or replace function public.sincronizar_conquistas(uid uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
   insert into conquista_estado (user_id, conquista_codigo, idioma_id, progresso_alvo)
-  select uid, c.codigo, null, 1 from conquistas c where c.escopo = 'global'
-  union all
-  select uid, c.codigo, i.id, 1
-  from conquistas c cross join idiomas i
-  where c.escopo = 'por_idioma' and i.user_id = uid;
+  select fonte.* from (
+    select uid, c.codigo, null::uuid, 1
+    from conquistas c
+    where c.escopo = 'global'
+    union all
+    select uid, c.codigo, i.id, 1
+    from conquistas c
+    cross join idiomas i
+    where c.escopo = 'por_idioma' and i.user_id = uid
+  ) as fonte
+  on conflict do nothing;
 end;
 $$;
 
