@@ -1,6 +1,6 @@
 # Poliglota
 
-App web pessoal de gestão de estudos de idiomas. **Uma única usuária**, três idiomas (inglês, espanhol, francês).
+App de gestão de estudos de idiomas. **Cada conta é um app sozinho**: dado isolado por RLS, e uma conta nova nasce configurada e vazia. Três idiomas (inglês, espanhol, francês).
 
 `docs/` é a fonte da verdade sobre **produto e comportamento**. Este arquivo é a fonte da verdade sobre **stack, processo e qualidade**. Em conflito: este arquivo vence na parte técnica, `docs/` vence na parte de produto — e o conflito é anunciado, nunca resolvido em silêncio.
 
@@ -73,7 +73,7 @@ docs/                        documentação de produto (fonte da verdade)
 2. **Teste antes da UI.** Toda função de domínio tem teste unitário antes de ser usada. Bordas obrigatórias: mês vazio, sessão que cruza a meia-noite, importação duplicada, sequência quebrada por um dia, palavra contada em dois idiomas.
 3. **Data é ponto de bug.** UTC no banco, conversão na borda para `America/Sao_Paulo`. "Hoje" é o dia civil em SP, nunca `new Date()` do servidor. Teste com relógio do sistema em UTC provando que 21h em SP ainda é o mesmo dia.
 4. **Nada de número mágico.** Metas, limiares de camada, percentuais da divisão-alvo e definição das marchas vêm da tabela de configuração, semeada por `seed.sql`. `1500` escrito num componente é bug.
-5. **Migrações versionadas**, uma por mudança, nunca editadas depois de aplicadas.
+5. **Migrações versionadas**, uma por mudança, nunca editadas depois de aplicadas. O CLI grava o hash de cada arquivo de `seed` e **nunca o re-executa**: seed é só para conteúdo que não depende de estado nenhum (o catálogo de conquistas). Qualquer coisa condicional — dados de uma conta que precisa existir antes — vira migração chamando uma função idempotente.
 6. **Estado vazio é feature.** Primeira abertura sem dado nenhum e volta depois de 22 dias sumida. O segundo caso é o mais importante: nenhuma tela grita fracasso.
 7. **Escrita otimista.** Registrar sessão e marcar tarefa respondem na hora, com rollback em falha.
 8. **Teclado.** Registrar uma sessão inteira sem mouse. Atalhos globais para as ações frequentes.
@@ -85,7 +85,7 @@ docs/                        documentação de produto (fonte da verdade)
 - **O app não gerencia flashcards.** Os cartões vivem no Flashcards Deluxe. Sem CRUD de cartão, sem repetição espaçada, sem tela de revisão de cartão, sem fila de devidos. O app registra contagem de palavras novas, dias com revisão e % de acerto informada. A lista colada na checagem de interferência **não é persistida**. (`RN-003`, `RN-401`, `RN-409`, `RN-1103`)
 - **Imersão nunca dispara produção.** Registrar imersão não gera tarefa, alerta, modal nem cobrança. A cobrança de produção é semanal e agregada. (`RN-002`)
 - **Escuta não é pilar.** Consumo passivo é categoria `imersao` e jamais entra na conta de estudo ativo. (`RN-001`, `RN-102`)
-- **Não é multiusuário.** Sem convite, papel, time ou compartilhamento. "Compartilhar" conquista gera imagem local, nunca link público.
+- **Contas isoladas, não multiusuário.** Existe login e pode existir mais de uma conta (para mandar o app a uma amiga), mas nada atravessa a fronteira do `user_id`: sem convite dentro do app, papel, time, feed ou compartilhamento de dado. "Compartilhar" conquista gera imagem local, nunca link público.
 - **Não é gamificação genérica.** Sem ponto, XP, nível inventado ou mascote. Só o catálogo de `docs/06-conquistas.md`.
 - **Nada de feature não pedida.** Sugerir, nunca implementar por conta.
 

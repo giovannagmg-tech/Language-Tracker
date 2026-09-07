@@ -27,10 +27,14 @@ Não há cadastro aberto: um e-mail fora de `EMAILS_PERMITIDOS` é recusado no e
 1. Crie o projeto no Supabase.
 2. `npx supabase link --project-ref <ref-do-projeto>`
 3. `npm run db:migrate` — cria o esquema, os índices, as políticas de RLS e o gatilho de bootstrap.
-4. `npm run db:seed` — carrega o catálogo de conquistas e, se a conta principal já existir, os dados dela. Pode rodar de novo sempre que o catálogo crescer: sincroniza as contas existentes.
+4. `npm run db:seed` — carrega o catálogo de conquistas e sincroniza as contas que já existem. Roda uma vez por versão do arquivo: o CLI guarda o hash.
 5. Em **Authentication → URL Configuration**, aponte *Site URL* para a URL do deploy e adicione `http://localhost:3000` em *Redirect URLs*.
 6. Faça o primeiro login. O gatilho `on_auth_user_created` cria a conta já configurada e **vazia**: três idiomas, cinco camadas, três marchas, divisão-alvo dos pilares, as metas do painel mensal e o estado inicial das conquistas.
-7. Depois do primeiro login, rode `npm run db:seed` de novo: aí o `seed_pessoal.sql` encontra a conta e aplica níveis, vocabulário acumulado, metas por idioma, blocos do plano e o mapeamento do Toggl. É idempotente e não toca em nenhuma outra conta.
+7. Depois do primeiro login, aplique os dados da conta principal:
+   ```sql
+   select public.aplicar_dados_conta_principal('seu@email.com');
+   ```
+   Idempotente e restrita a essa conta — pode rodar quantas vezes quiser.
 8. `npm run db:types` — gera `lib/supabase/types.ts`.
 
 ## Comandos
@@ -44,7 +48,7 @@ Não há cadastro aberto: um e-mail fora de `EMAILS_PERMITIDOS` é recusado no e
 | `npm run test:e2e` | Playwright |
 | `npm run db:migrate` | aplica as migrações |
 | `npm run db:types` | regenera os tipos do banco |
-| `npm run db:seed` | aplica migrações e roda os dois seeds (`supabase/config.toml`) |
+| `npm run db:seed` | aplica migrações e o catálogo de conquistas. Seeds rodam uma vez só: o CLI guarda o hash |
 
 ## Deploy na Vercel
 

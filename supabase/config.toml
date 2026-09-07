@@ -2,6 +2,6 @@ project_id = "lxxtusxgneqxmuavdcrg"
 
 [db.seed]
 enabled = true
-# Ordem importa: o catálogo global primeiro, os dados da conta principal depois.
-# seed_pessoal.sql não faz nada se a conta ainda não existe.
-sql_paths = ["./seed.sql", "./seed_pessoal.sql"]
+# Só conteúdo que não depende de conta nenhuma. O CLI grava o hash de cada
+# arquivo de seed e nunca mais o executa — nada condicional pode morar aqui.
+sql_paths = ["./seed.sql"]
