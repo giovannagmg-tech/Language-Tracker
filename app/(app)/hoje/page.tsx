@@ -5,6 +5,7 @@ import { PisoDiario } from "@/components/hoje/piso-diario";
 import { SemaforoRegras } from "@/components/hoje/semaforo-regras";
 import { Sequencias } from "@/components/hoje/sequencias";
 import { FormularioSessao } from "@/components/registro/formulario-sessao";
+import { sincronizarTarefas } from "@/lib/motores/tarefas";
 import { carregarHoje } from "@/lib/queries/hoje";
 
 function porExtenso(data: string): string {
@@ -17,6 +18,8 @@ function porExtenso(data: string): string {
 }
 
 export default async function HojePage() {
+  // As tarefas que as regras cobram são geradas ao abrir o dia (RN-801).
+  await sincronizarTarefas();
   const e = await carregarHoje();
 
   return (
