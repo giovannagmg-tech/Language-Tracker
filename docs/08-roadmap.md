@@ -199,19 +199,27 @@ Caminho crítico para "o app já vale a pena": **1 → 2 → 3 → 6**. As fatia
 
 ---
 
-# Pontos a confirmar
+# Pontos confirmados
 
-Dez perguntas. Nenhuma delas bloqueia o início: todas têm um valor assumido e documentado, e trocar o valor é edição de dado, não de código.
+Respondidos em 07/09/2026. Estes são os valores que o `supabase/seed_pessoal.sql` aplica.
 
-| # | Pergunta | Valor assumido |
+| # | Pergunta | Resposta |
 |---|---|---|
-| 1 | O trio de percentuais dos blocos do plano está mesmo na ordem **(francês, espanhol, inglês)**? | Sim — é a única leitura em que cada bloco dá 60% ao seu idioma-foco (`RN-901`) |
-| 2 | Quantas palavras acumuladas hoje em **espanhol** e **francês**? (o inglês vem do protótipo: 2.729) | espanhol 2.400 · francês 0 |
-| 3 | Meta diária de palavras novas por idioma | inglês 10 · espanhol 10 · francês 15 |
-| 4 | A meta de espanhol é **C1.1** ou **C1.2**? | C1.1 |
-| 5 | O bloco atual (francês) começou em **01/09/2026**? | Sim |
-| 6 | O **clube de conversação** tem dia fixo na semana? | Não — a sugestão automática de agendamento cai na próxima quarta |
-| 7 | O **áudio no grupo** conta como minutos de fala e como produção? | Sim, nos dois |
-| 8 | O deck de **gramática** tem % de acerto registrado com a mesma frequência do de vocabulário? | Sim — o campo existe em `RevisaoFlashcards.pct_acerto_gramatica`, opcional |
-| 9 | Quais são os **materiais principais** de cada idioma hoje, para semear a tela Materiais? | Nenhum semeado; a tela abre pedindo que sejam definidos |
-| 10 | Na marcha 3, a **aula particular** é semanal, quinzenal ou avulsa? | Semanal (`RN-202`, tarefa "aula particular ou conversação extra") |
+| 1 | Ordem dos percentuais dos blocos | **Confirmada: (francês, espanhol, inglês)**. A Planilha de Distribuição permite redistribuir e normalizar a qualquer momento (`RN-904`) |
+| 2 | Camadas de referência | **Inglês e espanhol miram Conexão (3.000); francês mira Viajante (1.500).** Acumulado inicial: inglês 2.729, espanhol 2.400 (estimativa editável), francês 0 |
+| 3 | Meta diária de palavras novas | **inglês 5 · espanhol 5 · francês 10** — calibrada para um hábito que ainda não é diário |
+| 4 | Meta de nível do espanhol | **C1.1** |
+| 5 | Início do bloco vigente | **07/09/2026** |
+| 6 | Clube de conversação com dia fixo | Não; a sugestão automática cai na próxima quarta |
+| 7 | Áudio no grupo conta como fala e produção | Sim, nos dois |
+| 8 | % de acerto do deck de gramática | Sim, campo opcional em `RevisaoFlashcards.pct_acerto_gramatica` |
+| 9 | Materiais principais | Nenhum semeado — a tela abre pedindo. Categorias: **app, livro, canal do YouTube, podcast**, além de curso, playlist, lista de palavras, deck e outro |
+| 10 | Total do Toggl para o teste da Fase 6 | **86:23:14** de imersão + ativo + flashcards nos três idiomas. Detalhamento em [09-linha-de-base-2026.md](09-linha-de-base-2026.md) |
+
+## Mudanças de escopo aprovadas em 07/09/2026
+
+| Mudança | Efeito |
+|---|---|
+| **Contas isoladas** — o app pode ser mandado para amigas | Login por magic link com allowlist; RLS por `user_id`; toda conta nova nasce configurada e sem nenhum dado (`bootstrap_usuario`). Continua sem papéis, convites ou compartilhamento |
+| **Stack** | Next.js + Supabase + Vercel, no lugar do local-first do doc 05 |
+| **Redistribuição de percentuais** | A Planilha de Distribuição é o lugar de mexer nos percentuais por idioma e por pilar, com normalização para 100% |

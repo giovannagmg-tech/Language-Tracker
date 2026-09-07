@@ -1,5 +1,7 @@
 # 05 — Arquitetura
 
+> ⚠️ **Superado em 07/09/2026 nas seções 1, 2, 4, 5 e 6.2.** A stack decidida é **Next.js (App Router) + Supabase (Postgres + Auth) + Vercel**, com contas isoladas por RLS. A argumentação local-first abaixo fica registrada como histórico da decisão. Continuam valendo integralmente: a separação de camadas (seção 3), a regra de domínio puro, a estratégia de testes (seção 7) e o ferramental (seção 8). A fonte da verdade técnica é o `CLAUDE.md`.
+
 ## 1. A pergunta que define tudo: por que não tem backend
 
 O app tem **uma usuária, um dispositivo por vez, e nenhum dado que precise ser compartilhado, moderado, autorizado ou processado em servidor**. Um backend multiusuário aqui não resolveria nenhum problema real e criaria seis:

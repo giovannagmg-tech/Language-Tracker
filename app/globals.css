@@ -1,0 +1,312 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Tokens do design system — docs/07-design-system.md
+   Nenhuma cor tem definição única dentro de um bloco de tema.
+--------------------------------------------------------------------------- */
+:root {
+  /* neutros e superfícies */
+  --cor-fundo: #fafaf8;
+  --cor-superficie: #ffffff;
+  --cor-superficie-2: #f4f4f1;
+  --cor-borda: #e7e7e1;
+  --cor-borda-forte: #d5d5cd;
+  --cor-texto: #171a15;
+  --cor-texto-2: #6c7268;
+  --cor-texto-3: #9aa095;
+
+  /* sidebar e marca */
+  --cor-sidebar-bg: #1a1d18;
+  --cor-sidebar-texto: #c9cec3;
+  --cor-sidebar-hover: #262a22;
+  --cor-sidebar-item-ativo: #d8f26b;
+  --cor-sidebar-texto-ativo: #171a15;
+  --lime-500: #c7e93f;
+  --lime-300: #d8f26b;
+  --lime-100: #eef9c4;
+
+  /* cor por tipo de meta */
+  --meta-longo: #f07a2b;
+  --meta-longo-fraco: #fdeedf;
+  --meta-mensal: #e8558e;
+  --meta-mensal-fraco: #fce7f0;
+  --meta-semanal: #3b72d9;
+  --meta-semanal-fraco: #e4eefc;
+
+  /* cor por categoria de conquista */
+  --conq-consistencia: #e07b2b;
+  --conq-consistencia-bg: #fdeedf;
+  --conq-metodo: #3b72d9;
+  --conq-metodo-bg: #e4eefc;
+  --conq-producao: #1f9d57;
+  --conq-producao-bg: #e1f3e7;
+  --conq-camada: #7857d6;
+  --conq-camada-bg: #ece6fb;
+  --conq-recuperacao: #147a55;
+  --conq-recuperacao-bg: #dcede4;
+
+  /* cor por pilar — imersão é sempre cinza (RN-001) */
+  --pilar-vocabulario: #3b72d9;
+  --pilar-gramatica: #7857d6;
+  --pilar-pronuncia: #e07b2b;
+  --pilar-fala: #1f9d57;
+  --imersao: #9aa095;
+
+  /* cor por idioma */
+  --idioma-ingles: #2f6fed;
+  --idioma-espanhol: #e4a11b;
+  --idioma-frances: #d14d5a;
+
+  /* semânticas e semáforo */
+  --sucesso: #1f9d57;
+  --sucesso-bg: #e1f3e7;
+  --atencao: #e0a32b;
+  --atencao-bg: #fbf0d9;
+  --perigo: #d4483b;
+  --perigo-bg: #fbe5e2;
+  --neutro: #9aa095;
+
+  /* sombras */
+  --s-1: 0 1px 2px rgb(20 23 17 / 0.05);
+  --s-card: 0 1px 2px rgb(20 23 17 / 0.04), 0 2px 6px rgb(20 23 17 / 0.05);
+  --s-popover: 0 8px 24px rgb(20 23 17 / 0.12);
+
+  /* ponte para os tokens do shadcn */
+  --radius: 0.625rem;
+  --background: var(--cor-fundo);
+  --foreground: var(--cor-texto);
+  --card: var(--cor-superficie);
+  --card-foreground: var(--cor-texto);
+  --popover: var(--cor-superficie);
+  --popover-foreground: var(--cor-texto);
+  --primary: var(--cor-texto);
+  --primary-foreground: var(--cor-fundo);
+  --secondary: var(--cor-superficie-2);
+  --secondary-foreground: var(--cor-texto);
+  --muted: var(--cor-superficie-2);
+  --muted-foreground: var(--cor-texto-2);
+  --accent: var(--lime-100);
+  --accent-foreground: var(--cor-texto);
+  --destructive: var(--perigo);
+  --border: var(--cor-borda);
+  --input: var(--cor-borda-forte);
+  --ring: var(--lime-500);
+  --chart-1: var(--pilar-vocabulario);
+  --chart-2: var(--pilar-gramatica);
+  --chart-3: var(--pilar-pronuncia);
+  --chart-4: var(--pilar-fala);
+  --chart-5: var(--imersao);
+  --sidebar: var(--cor-sidebar-bg);
+  --sidebar-foreground: var(--cor-sidebar-texto);
+  --sidebar-primary: var(--cor-sidebar-item-ativo);
+  --sidebar-primary-foreground: var(--cor-sidebar-texto-ativo);
+  --sidebar-accent: var(--cor-sidebar-hover);
+  --sidebar-accent-foreground: var(--cor-sidebar-texto);
+  --sidebar-border: var(--cor-sidebar-hover);
+  --sidebar-ring: var(--lime-500);
+}
+
+.dark {
+  --cor-fundo: #121410;
+  --cor-superficie: #1b1e18;
+  --cor-superficie-2: #23261f;
+  --cor-borda: #2e322a;
+  --cor-borda-forte: #3d4238;
+  --cor-texto: #eceee8;
+  --cor-texto-2: #a2a89c;
+  --cor-texto-3: #767c70;
+
+  --cor-sidebar-bg: #0d0f0b;
+  --cor-sidebar-hover: #1a1d18;
+
+  --meta-longo: #f5934f;
+  --meta-longo-fraco: rgb(240 122 43 / 0.18);
+  --meta-mensal: #f076a6;
+  --meta-mensal-fraco: rgb(232 85 142 / 0.18);
+  --meta-semanal: #6c9bf0;
+  --meta-semanal-fraco: rgb(59 114 217 / 0.18);
+
+  --conq-consistencia: #f09a54;
+  --conq-consistencia-bg: rgb(224 123 43 / 0.16);
+  --conq-metodo: #6c9bf0;
+  --conq-metodo-bg: rgb(59 114 217 / 0.16);
+  --conq-producao: #3fbe77;
+  --conq-producao-bg: rgb(31 157 87 / 0.16);
+  --conq-camada: #9d84e8;
+  --conq-camada-bg: rgb(120 87 214 / 0.16);
+  --conq-recuperacao: #2f9d75;
+  --conq-recuperacao-bg: rgb(20 122 85 / 0.16);
+
+  --pilar-vocabulario: #6c9bf0;
+  --pilar-gramatica: #9d84e8;
+  --pilar-pronuncia: #f09a54;
+  --pilar-fala: #3fbe77;
+  --imersao: #767c70;
+
+  --idioma-ingles: #6c9bf0;
+  --idioma-espanhol: #f2bc4e;
+  --idioma-frances: #e5757f;
+
+  --sucesso: #3fbe77;
+  --sucesso-bg: rgb(31 157 87 / 0.16);
+  --atencao: #f0bb55;
+  --atencao-bg: rgb(224 163 43 / 0.16);
+  --perigo: #e86f62;
+  --perigo-bg: rgb(212 72 59 / 0.16);
+  --neutro: #767c70;
+
+  --s-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --s-card: 0 1px 3px rgb(0 0 0 / 0.45);
+  --s-popover: 0 10px 28px rgb(0 0 0 / 0.55);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* mapeamentos que os componentes do shadcn esperam */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-fundo: var(--cor-fundo);
+  --color-superficie: var(--cor-superficie);
+  --color-superficie-2: var(--cor-superficie-2);
+  --color-borda: var(--cor-borda);
+  --color-borda-forte: var(--cor-borda-forte);
+  --color-texto: var(--cor-texto);
+  --color-texto-2: var(--cor-texto-2);
+  --color-texto-3: var(--cor-texto-3);
+
+  --color-sidebar-bg: var(--cor-sidebar-bg);
+  --color-sidebar-texto: var(--cor-sidebar-texto);
+  --color-sidebar-hover: var(--cor-sidebar-hover);
+  --color-sidebar-ativo: var(--cor-sidebar-item-ativo);
+  --color-sidebar-texto-ativo: var(--cor-sidebar-texto-ativo);
+  --color-lime-500: var(--lime-500);
+  --color-lime-300: var(--lime-300);
+  --color-lime-100: var(--lime-100);
+
+  --color-meta-longo: var(--meta-longo);
+  --color-meta-longo-fraco: var(--meta-longo-fraco);
+  --color-meta-mensal: var(--meta-mensal);
+  --color-meta-mensal-fraco: var(--meta-mensal-fraco);
+  --color-meta-semanal: var(--meta-semanal);
+  --color-meta-semanal-fraco: var(--meta-semanal-fraco);
+
+  --color-conq-consistencia: var(--conq-consistencia);
+  --color-conq-consistencia-bg: var(--conq-consistencia-bg);
+  --color-conq-metodo: var(--conq-metodo);
+  --color-conq-metodo-bg: var(--conq-metodo-bg);
+  --color-conq-producao: var(--conq-producao);
+  --color-conq-producao-bg: var(--conq-producao-bg);
+  --color-conq-camada: var(--conq-camada);
+  --color-conq-camada-bg: var(--conq-camada-bg);
+  --color-conq-recuperacao: var(--conq-recuperacao);
+  --color-conq-recuperacao-bg: var(--conq-recuperacao-bg);
+
+  --color-pilar-vocabulario: var(--pilar-vocabulario);
+  --color-pilar-gramatica: var(--pilar-gramatica);
+  --color-pilar-pronuncia: var(--pilar-pronuncia);
+  --color-pilar-fala: var(--pilar-fala);
+  --color-imersao: var(--imersao);
+
+  --color-idioma-ingles: var(--idioma-ingles);
+  --color-idioma-espanhol: var(--idioma-espanhol);
+  --color-idioma-frances: var(--idioma-frances);
+
+  --color-sucesso: var(--sucesso);
+  --color-sucesso-bg: var(--sucesso-bg);
+  --color-atencao: var(--atencao);
+  --color-atencao-bg: var(--atencao-bg);
+  --color-perigo: var(--perigo);
+  --color-perigo-bg: var(--perigo-bg);
+  --color-neutro: var(--neutro);
+
+  --text-display: 2.75rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+  --text-numero: 2rem;
+  --text-numero--line-height: 1.1;
+  --text-numero--letter-spacing: -0.02em;
+  --text-numero--font-weight: 700;
+  --text-numero-sm: 1.375rem;
+  --text-numero-sm--line-height: 1.15;
+  --text-numero-sm--font-weight: 700;
+  --text-h1: 1.75rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 650;
+  --text-h2: 1.125rem;
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+  --text-h3: 0.9375rem;
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 600;
+  --text-corpo: 0.875rem;
+  --text-corpo--line-height: 1.5;
+  --text-pequeno: 0.8125rem;
+  --text-pequeno--line-height: 1.45;
+  --text-rotulo: 0.6875rem;
+  --text-rotulo--line-height: 1.2;
+  --text-rotulo--letter-spacing: 0.06em;
+  --text-rotulo--font-weight: 600;
+
+  --radius-card: 16px;
+  --radius-modal: 20px;
+
+  --shadow-card: var(--s-card);
+  --shadow-popover: var(--s-popover);
+}
+
+@layer base {
+  * {
+    @apply border-borda outline-ring/50;
+  }
+  body {
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    @apply font-sans text-corpo;
+  }
+  /* números em coluna precisam alinhar — docs/07, 1.8 */
+  .tabular,
+  [data-numero] {
+    font-variant-numeric: tabular-nums;
+  }
+}

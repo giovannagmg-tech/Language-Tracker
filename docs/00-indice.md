@@ -11,7 +11,8 @@ App web pessoal de gestão de estudos de idiomas. Usuária única. Inglês, espa
 | 05 | [Arquitetura](05-arquitetura.md) | Stack, pastas, persistência, backup, por que sem backend |
 | 06 | [Conquistas](06-conquistas.md) | Catálogo completo com critério computável |
 | 07 | [Design system](07-design-system.md) | Tokens, componentes, regras de cor |
-| 08 | [Roadmap](08-roadmap.md) | Fases entregáveis + **Pontos a confirmar** (seção final) |
+| 08 | [Roadmap](08-roadmap.md) | Fases entregáveis + pontos confirmados |
+| 09 | [Linha de base 2026](09-linha-de-base-2026.md) | O export real do Toggl — critério de aceitação dos indicadores |
 
 **Ordem de leitura para quem vai construir:** 01 → 02 → 03 → 05 → 04 → 07 → 06 → 08.
 

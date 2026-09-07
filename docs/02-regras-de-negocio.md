@@ -579,7 +579,7 @@ A tela Tarefas tem duas seções fixas: **Geradas pelas regras** e **Minhas tare
 
 | Bloco | Período | Foco | FR | ES | EN |
 |---|---|---|---|---|---|
-| B1 | 01/09/2026 – 31/12/2026 | francês | 60% | 20% | 20% |
+| B1 | 07/09/2026 – 31/12/2026 | francês | 60% | 20% | 20% |
 | B2 | 01/01/2027 – 30/04/2027 | espanhol | 25% | 60% | 15% |
 | B3 | 01/05/2027 – 31/08/2027 | inglês | 25% | 15% | 60% |
 | B4 | 01/09/2027 – 31/12/2027 | francês | 60% | 25% | 15% |

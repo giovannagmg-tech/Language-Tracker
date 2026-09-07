@@ -93,7 +93,7 @@ Isto não é "depois a gente vê". É **não construir**:
 - ❌ **Gerenciador de flashcards.** Sem CRUD de cartões, sem deck dentro do app, sem algoritmo de repetição espaçada, sem fila de revisão, sem TTS, sem sincronização com o Flashcards Deluxe. O app registra *contagens e checks*, não cartões.
 - ❌ **Fila de cartões devidos.** Não aparece na tela Revisão nem em lugar nenhum. Ela mora no Flashcards Deluxe.
 - ❌ **Qualquer regra que force produção logo após uma sessão de imersão.** Ver `RN-002`.
-- ❌ Multiusuário, login, papéis, permissões, convites.
+- ⚠️ **Contas isoladas, não multiusuário.** *(revisto em 07/09/2026, a pedido da usuária.)* Existe login e existe mais de uma conta — o app pode ser mandado para uma amiga —, mas **cada conta é um app sozinho**: dado isolado por RLS, nenhuma leitura atravessa o `user_id`. Continuam fora do escopo papéis, permissões, convites dentro do app, times, feed e qualquer forma de compartilhamento de dado. Uma conta nova nasce configurada e **vazia**.
 - ❌ Cobrança, planos, trial, onboarding de terceiros.
 - ❌ Conteúdo de ensino: lições, exercícios, correção de frases, dicionário embutido, tradutor.
 - ❌ Rede social, feed, ranking, comparação com outras pessoas.

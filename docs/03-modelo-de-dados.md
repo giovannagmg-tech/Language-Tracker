@@ -1,6 +1,8 @@
 # 03 — Modelo de dados
 
-Banco local (IndexedDB via Dexie). Usuária única: **não existe** tabela de usuário, nem `user_id` em lugar nenhum.
+Banco Postgres no Supabase. **Toda tabela por usuário tem `user_id uuid` com RLS** (`user_id = auth.uid()`): cada conta é um app sozinho, e nenhuma leitura atravessa essa fronteira. Não há tabela de perfil própria — a identidade é a `auth.users` do Supabase.
+
+> Revisto em 07/09/2026: a versão original deste documento assumia app local-first sem servidor. Ver `CLAUDE.md`, seção "Conflitos já resolvidos".
 
 Convenções:
 
@@ -384,7 +386,7 @@ Um material **principal** por idioma; os demais são secundários.
 |---|---|---|
 | `id` | uuid | |
 | `idioma_id` | `IdiomaId` | |
-| `tipo` | `'livro' \| 'curso' \| 'playlist' \| 'lista_palavras' \| 'deck' \| 'outro'` | |
+| `tipo` | `'app' \| 'livro' \| 'canal_youtube' \| 'podcast' \| 'curso' \| 'playlist' \| 'lista_palavras' \| 'deck' \| 'outro'` | categorias confirmadas em 07/09/2026 |
 | `titulo` | string | |
 | `principal` | boolean | **no máximo um `true` por idioma** |
 | `unidade` | `'licao' \| 'capitulo' \| 'aula' \| 'pagina' \| 'video'` | rótulo da unidade |
