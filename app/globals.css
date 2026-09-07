@@ -49,16 +49,25 @@
   --conq-recuperacao: #147a55;
   --conq-recuperacao-bg: #dcede4;
 
-  /* cor por pilar — imersão é sempre cinza (RN-001) */
+  /* cor por pilar — validada com scripts/validate_palette.js em claro e escuro.
+     O roxo original de gramática ficava a ΔE 1,1 do azul de vocabulário em
+     deuteranopia: dois pilares adjacentes indistinguíveis. */
   --pilar-vocabulario: #3b72d9;
-  --pilar-gramatica: #7857d6;
-  --pilar-pronuncia: #e07b2b;
+  --pilar-gramatica: #b0479e;
+  --pilar-pronuncia: #c96a1f;
   --pilar-fala: #1f9d57;
   --imersao: #9aa095;
 
+  /* marcas de gráfico. Imersão é cinza de propósito (RN-001): não é categoria,
+     é o oposto de estudo ativo. Por isso vem sempre com rótulo direto. */
+  --grafico-ativo: #1f9d57;
+  --grafico-flashcards: #3b72d9;
+  --grafico-imersao: #7e857a;
+  --grafico-alvo: #9aa095;
+
   /* cor por idioma */
   --idioma-ingles: #2f6fed;
-  --idioma-espanhol: #e4a11b;
+  --idioma-espanhol: #c08a12;
   --idioma-frances: #d14d5a;
 
   /* semânticas e semáforo */
@@ -141,15 +150,10 @@
   --conq-recuperacao: #2f9d75;
   --conq-recuperacao-bg: rgb(20 122 85 / 0.16);
 
-  --pilar-vocabulario: #6c9bf0;
-  --pilar-gramatica: #9d84e8;
-  --pilar-pronuncia: #f09a54;
-  --pilar-fala: #3fbe77;
+  /* As marcas de gráfico não invertem no escuro: os mesmos passos já validam
+     contra as duas superfícies. Clarear quebraria a faixa de luminosidade. */
   --imersao: #767c70;
-
-  --idioma-ingles: #6c9bf0;
-  --idioma-espanhol: #f2bc4e;
-  --idioma-frances: #e5757f;
+  --grafico-imersao: #8a9184;
 
   --sucesso: #3fbe77;
   --sucesso-bg: rgb(31 157 87 / 0.16);
@@ -246,6 +250,10 @@
   --color-pilar-pronuncia: var(--pilar-pronuncia);
   --color-pilar-fala: var(--pilar-fala);
   --color-imersao: var(--imersao);
+  --color-grafico-ativo: var(--grafico-ativo);
+  --color-grafico-flashcards: var(--grafico-flashcards);
+  --color-grafico-imersao: var(--grafico-imersao);
+  --color-grafico-alvo: var(--grafico-alvo);
 
   --color-idioma-ingles: var(--idioma-ingles);
   --color-idioma-espanhol: var(--idioma-espanhol);

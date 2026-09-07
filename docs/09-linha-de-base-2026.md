@@ -59,7 +59,8 @@ Leitura: o francês é o único idioma em que o estudo ativo supera a imersão �
 2. `horasPorIdioma()` devolve 46:21:57 / 35:15:37 / 4:45:40, e o total fecha em 86:23:14.
 3. `maiorLacuna()` devolve 22.
 4. `diasComRegistro()` devolve 97.
-5. `concentracao(10)` devolve ~32%.
-6. `diagnostico()` abre com a frase de consumo passivo (`RN-712`, item 1).
+5. `diagnostico()` abre com a frase de consumo passivo (`RN-712`, item 1), seguida da de produção.
+
+A **concentração** (32% das horas nos 10 maiores dias) depende da distribuição real dia a dia, que o fixture sintético não reproduz: ela é verificada contra o CSV de verdade na Fase 6.
 
 O critério de pronto da Fase 6 (importação do Toggl) é importar o CSV real e obter exatamente estes totais.

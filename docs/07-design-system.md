@@ -67,20 +67,23 @@ Bloqueada: `--cor-superficie-2` de fundo, `--cor-texto-3` no texto, ícone dessa
 
 | Pilar | Token | Claro | Escuro |
 |---|---|---|---|
-| Vocabulário | `--pilar-vocabulario` | `#3B72D9` | `#6C9BF0` |
-| Gramática | `--pilar-gramatica` | `#7857D6` | `#9D84E8` |
-| Pronúncia | `--pilar-pronuncia` | `#E07B2B` | `#F09A54` |
-| Fala | `--pilar-fala` | `#1F9D57` | `#3FBE77` |
+| Vocabulário | `--pilar-vocabulario` | `#3B72D9` | mesmo |
+| Gramática | `--pilar-gramatica` | `#B0479E` | mesmo |
+| Pronúncia | `--pilar-pronuncia` | `#C96A1F` | mesmo |
+| Fala | `--pilar-fala` | `#1F9D57` | mesmo |
 | Imersão (não-pilar) | `--imersao` | `#9AA095` | `#767C70` |
+| Imersão em gráfico | `--grafico-imersao` | `#7E857A` | `#8A9184` |
 
-Imersão é **sempre cinza**. Nunca recebe cor de destaque, em gráfico nenhum. É a tradução visual de `RN-001`.
+Imersão é **sempre cinza**. Nunca recebe cor de destaque, em gráfico nenhum. É a tradução visual de `RN-001`. Como cinza reprova o piso de croma por definição, a fatia de imersão vem **sempre com rótulo direto** — é a codificação secundária que a torna legítima.
+
+> **Paleta validada, não estimada.** Corrigida em 07/09/2026 depois de rodar o validador de paleta nas duas superfícies. O roxo original de gramática (`#7857D6`) ficava a ΔE 1,1 do azul de vocabulário em deuteranopia e a 9,3 em visão normal: dois pilares adjacentes que ninguém distinguia. As marcas de gráfico **não invertem** no tema escuro — os mesmos passos já passam contra as duas superfícies, e clarear quebraria a faixa de luminosidade. O par pronúncia↔fala fica a ΔE 6,8 em deuteranopia, dentro da faixa que só é legal com codificação secundária; por isso todo gráfico de pilar rotula o eixo de categoria.
 
 ### 1.6 Cores por idioma
 
 | Idioma | Token | Claro | Escuro |
 |---|---|---|---|
 | Inglês | `--idioma-ingles` | `#2F6FED` | `#6C9BF0` |
-| Espanhol | `--idioma-espanhol` | `#E4A11B` | `#F2BC4E` |
+| Espanhol | `--idioma-espanhol` | `#C08A12` | mesmo |
 | Francês | `--idioma-frances` | `#D14D5A` | `#E5757F` |
 
 ### 1.7 Semânticas e semáforo
@@ -96,7 +99,7 @@ Imersão é **sempre cinza**. Nunca recebe cor de destaque, em gráfico nenhum. 
 ### 1.8 Tipografia
 
 Família: **Inter** (variável, empacotada localmente), fallback `system-ui, -apple-system, "Segoe UI", sans-serif`.
-Todos os números usam `font-variant-numeric: tabular-nums` — colunas de dígitos precisam alinhar.
+`font-variant-numeric: tabular-nums` só onde dígitos alinham verticalmente: linha de tabela, tick de eixo, valor em lista. Número-herói e stat tile usam figuras proporcionais — largura igual num tamanho de display faz "121" parecer frouxo.
 
 | Token | Tamanho / entrelinha | Peso | Uso |
 |---|---|---|---|
@@ -317,7 +320,7 @@ Fixas na tabela 1.4. A categoria nunca troca de cor entre telas.
 - Imersão é sempre `--imersao`, cinza, em qualquer contexto.
 
 ### 4.4 Alvo × realizado
-Realizado = preenchido, cor cheia. Alvo = mesma cor a 25% de opacidade com contorno tracejado 1px. Linha de meta em gráficos de série = traço horizontal 1,5px em `--cor-texto` com rótulo em `--txt-rotulo`.
+Realizado = preenchido, cor cheia. Alvo = mesma cor a 25% de opacidade, sem tracejado. Toda linha de meta é traço sólido de 1,5px com rótulo, e a escala do eixo sempre inclui a meta: uma meta fora da escala some justo quando o valor está longe dela. Linha de meta em gráficos de série = traço horizontal 1,5px em `--cor-texto` com rótulo em `--txt-rotulo`.
 
 ### 4.5 Semáforo
 `--sucesso` / `--atencao` / `--perigo` / `--neutro` são exclusivos de estado de regra, prazo e alerta. **Nunca** usados para representar dado (uma barra de horas jamais é vermelha por ser alta).
