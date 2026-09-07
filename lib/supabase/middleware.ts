@@ -1,13 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_CHAVE_PUBLICA, SUPABASE_URL } from "./env";
+import type { Database } from "./types";
 
 const ROTAS_PUBLICAS = ["/login", "/auth"];
 
 export async function renovarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });
 
-  const supabase = createServerClient(SUPABASE_URL(), SUPABASE_CHAVE_PUBLICA(), {
+  const supabase = createServerClient<Database>(SUPABASE_URL(), SUPABASE_CHAVE_PUBLICA(), {
     cookies: {
       getAll() {
         return request.cookies.getAll();

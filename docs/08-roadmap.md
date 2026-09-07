@@ -206,7 +206,7 @@ Respondidos em 07/09/2026. Estes são os valores que o `supabase/seed_pessoal.sq
 | # | Pergunta | Resposta |
 |---|---|---|
 | 1 | Ordem dos percentuais dos blocos | **Confirmada: (francês, espanhol, inglês)**. A Planilha de Distribuição permite redistribuir e normalizar a qualquer momento (`RN-904`) |
-| 2 | Camadas de referência | **Inglês e espanhol miram Conexão (3.000); francês mira Viajante (1.500).** Acumulado inicial: inglês 2.729, espanhol 2.400 (estimativa editável), francês 0 |
+| 2 | Camadas | **Atuais: inglês e espanhol em Conexão; francês em Viajante.** Sem contagem exata, o acumulado inicial começa no piso de cada camada — inglês 3.000, espanhol 3.000, francês 1.500. Editável em Configurações |
 | 3 | Meta diária de palavras novas | **inglês 5 · espanhol 5 · francês 10** — calibrada para um hábito que ainda não é diário |
 | 4 | Meta de nível do espanhol | **C1.1** |
 | 5 | Início do bloco vigente | **07/09/2026** |

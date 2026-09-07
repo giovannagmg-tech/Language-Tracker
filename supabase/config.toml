@@ -1,0 +1,7 @@
+project_id = "lxxtusxgneqxmuavdcrg"
+
+[db.seed]
+enabled = true
+# Ordem importa: o catálogo global primeiro, os dados da conta principal depois.
+# seed_pessoal.sql não faz nada se a conta ainda não existe.
+sql_paths = ["./seed.sql", "./seed_pessoal.sql"]

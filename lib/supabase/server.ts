@@ -1,15 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { SUPABASE_CHAVE_PUBLICA, SUPABASE_URL } from "./env";
+import type { Database } from "./types";
 
-/**
- * Cliente para Server Components e Server Actions.
- * Sem tipos gerados ainda: rode `npm run db:types` depois de criar o projeto
- * no Supabase e passe `Database` como genérico (primeira tarefa da Fase 1).
- */
+/** Cliente para Server Components e Server Actions. */
 export async function supabaseServidor() {
   const jar = await cookies();
-  return createServerClient(SUPABASE_URL(), SUPABASE_CHAVE_PUBLICA(), {
+  return createServerClient<Database>(SUPABASE_URL(), SUPABASE_CHAVE_PUBLICA(), {
     cookies: {
       getAll() {
         return jar.getAll();
