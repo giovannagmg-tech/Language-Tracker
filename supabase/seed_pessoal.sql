@@ -23,10 +23,10 @@ begin
   select id into id_fr from idiomas where user_id = uid and slug = 'frances';
 
   -- Níveis, vocabulário acumulado e meta diária.
-  -- Camadas ATUAIS (confirmadas em 07/09/2026): inglês e espanhol em Conexão,
-  -- francês em Viajante. Sem contagem exata informada, o acumulado começa no
-  -- piso de cada camada — é o menor número compatível com o que ela declarou.
-  -- Ajustável em Configurações sem migração.
+  -- Camadas ATUAIS (confirmadas em 07/09/2026): inglês e espanhol em Conexão.
+  -- Sem contagem exata informada, o acumulado começa no piso da camada.
+  -- Francês começa do zero, coerente com o nível A0.
+  -- Tudo ajustável em Configurações, sem migração.
   update idiomas set nivel_inicial='B1.2', nivel_atual='B1.2', nivel_meta='B2.2',
     palavras_base=3000, meta_palavras_dia=5, data_meta_nivel='2027-08-31'
     where id = id_en;
@@ -34,7 +34,7 @@ begin
     palavras_base=3000, meta_palavras_dia=5, data_meta_nivel='2027-04-30'
     where id = id_es;
   update idiomas set nivel_inicial='A0', nivel_atual='A0', nivel_meta='B2.1',
-    palavras_base=1500, meta_palavras_dia=10, data_meta_nivel='2027-12-31'
+    palavras_base=0, meta_palavras_dia=10, data_meta_nivel='2027-12-31'
     where id = id_fr;
 
   update metas m set valor_alvo = i.meta_palavras_dia
