@@ -604,6 +604,41 @@ export type Database = {
           },
         ]
       }
+      material_progresso: {
+        Row: {
+          criado_em: string
+          data: string
+          id: string
+          material_id: string
+          posicao: number
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          data: string
+          id?: string
+          material_id: string
+          posicao: number
+          user_id: string
+        }
+        Update: {
+          criado_em?: string
+          data?: string
+          id?: string
+          material_id?: string
+          posicao?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_progresso_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materiais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       metas: {
         Row: {
           ativa: boolean
@@ -1231,6 +1266,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      aplicar_dados_conta_principal: {
+        Args: { p_email: string }
+        Returns: string
+      }
       bootstrap_usuario: { Args: { uid: string }; Returns: undefined }
       sincronizar_conquistas: { Args: { uid: string }; Returns: undefined }
     }

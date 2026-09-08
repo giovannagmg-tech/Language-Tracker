@@ -4,6 +4,11 @@
  * Se um valor mudar aqui, muda na migração — e vice-versa.
  */
 
+/** Os slugs dos idiomas semeados. A tabela aceita outros; as heurísticas de
+ * interferência só conhecem estes três. */
+export const IDIOMAS_SLUG = ["ingles", "espanhol", "frances"] as const;
+export type IdiomaSlug = (typeof IDIOMAS_SLUG)[number];
+
 export const PILARES = ["vocabulario", "gramatica", "pronuncia", "fala"] as const;
 export type Pilar = (typeof PILARES)[number];
 

@@ -1,12 +1,19 @@
 import { Library } from "lucide-react";
 import { CabecalhoPagina } from "@/components/app/cabecalho-pagina";
-import { EmConstrucao } from "@/components/app/em-construcao";
+import { PainelRecursos } from "@/components/acervo/recursos";
+import { carregarRecursos } from "@/lib/queries/acervo";
 
-export default function Pagina() {
+export default async function RecursosPage() {
+  const e = await carregarRecursos();
+
   return (
     <>
-      <CabecalhoPagina icone={Library} titulo="Recursos" subtitulo="Links e ferramentas com tags" />
-      <EmConstrucao fase="Fase 5" />
+      <CabecalhoPagina
+        icone={Library}
+        titulo="Recursos"
+        subtitulo="Dicionários, listas, canais e comunidades"
+      />
+      <PainelRecursos estado={e} />
     </>
   );
 }
