@@ -49,7 +49,8 @@ Não há cadastro aberto: um e-mail fora de `EMAILS_PERMITIDOS` é recusado no e
 | `npm run build` | build de produção |
 | `npm run lint` | ESLint + `tsc --noEmit` |
 | `npm test` | Vitest, com `TZ=UTC` (o fuso do servidor) |
-| `npm run test:e2e` | Playwright |
+| `npm run test:e2e` | Playwright — os fluxos com login pulam sem sessão gravada |
+| `npm run e2e:sessao` | abre o navegador para você logar uma vez e grava `e2e/.sessao.json` |
 | `npm run db:migrate` | aplica as migrações |
 | `npm run db:types` | regenera os tipos do banco |
 | `npm run db:seed` | aplica migrações e o catálogo de conquistas. Seeds rodam uma vez só: o CLI guarda o hash |

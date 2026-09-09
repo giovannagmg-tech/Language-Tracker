@@ -12,7 +12,8 @@
     "test:e2e": "playwright test",
     "db:migrate": "supabase db push",
     "db:types": "supabase gen types typescript --linked > lib/supabase/types.ts",
-    "db:seed": "supabase db push --include-seed"
+    "db:seed": "supabase db push --include-seed",
+    "e2e:sessao": "tsx e2e/gravar-sessao.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -54,6 +55,7 @@
     "jsdom": "^29.1.1",
     "supabase": "^2.116.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5",
     "vitest": "^5.0.0"
   }

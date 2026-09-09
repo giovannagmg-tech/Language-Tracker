@@ -33,10 +33,13 @@ Regras da stack:
 | `npm run build` | build de produção |
 | `npm test` | Vitest (lógica de domínio) |
 | `npm run test:e2e` | Playwright (fluxos críticos) |
+| `npm run e2e:sessao` | grava a sessão uma vez, para os testes que exigem login |
 | `npm run lint` | ESLint + `tsc --noEmit` |
 | `npm run db:types` | `supabase gen types typescript` → `lib/supabase/types.ts` |
 | `npm run db:migrate` | aplica `supabase/migrations/` |
 | `npm run db:seed` | aplica `supabase/seed.sql` |
+
+Dois módulos `"use server"` já quebraram o build por exportarem constante junto das ações: **só função assíncrona sai de um arquivo `"use server"`**. Constantes e tipos vão para um módulo comum ao lado.
 
 ## Mapa de pastas
 
