@@ -45,3 +45,4 @@ supabase/.temp
 e2e/.sessao.json
 test-results/
 playwright-report/
+.tmp/

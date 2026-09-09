@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import {
   classificar,
   conflitoGramaticaPronuncia,
@@ -29,6 +30,7 @@ function revalidarTudo() {
   revalidatePath("/hoje");
   revalidatePath("/registro");
   revalidatePath("/dashboard");
+  revalidatePath("/historico");
 }
 
 /**
@@ -177,10 +179,18 @@ export async function registrarAudioGrupo(idiomaId: string): Promise<ResultadoRe
   });
 }
 
-/** Desfazer do toast. Só apaga o que acabou de ser criado. */
-export async function excluirSessao(id: string): Promise<{ ok: boolean }> {
+/**
+ * Apaga uma sessão. Serve tanto ao "desfazer" do toast quanto ao histórico.
+ * O RLS garante que só a dona apaga a própria linha — o `id` sozinho não
+ * alcança sessão de ninguém.
+ */
+export async function excluirSessao(id: string): Promise<{ ok: boolean; erro?: string }> {
+  if (!z.string().uuid().safeParse(id).success) return { ok: false, erro: "Registro inválido." };
+
   const { supabase } = await idDoUsuario();
   const { error } = await supabase.from("sessoes").delete().eq("id", id);
+  if (error) return { ok: false, erro: error.message };
+
   revalidarTudo();
-  return { ok: !error };
+  return { ok: true };
 }

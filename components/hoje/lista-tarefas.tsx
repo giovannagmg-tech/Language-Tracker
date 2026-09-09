@@ -24,6 +24,14 @@ type Props = {
 /** Tarefas que um clique resolve. O resto abre o registro já preenchido. */
 const RESOLVE_DIRETO = new Set(["flashcards", "fala_1min", "audio_grupo"]);
 
+/**
+ * Só o check de flashcards é interruptor: `alternarRevisao` marca e desmarca a
+ * mesma linha. As outras nascem de sessões gravadas — "desfazer" ali é apagar
+ * registro, e com mais de um no dia o app não tem como adivinhar qual. Essas
+ * mandam para o histórico de hoje, onde cada linha some por escolha dela.
+ */
+const ALTERNAVEL = new Set(["flashcards"]);
+
 function unidade(t: TarefaAvaliada): string {
   if (t.unidade === "min") return `${t.atual}/${t.alvo} min`;
   if (t.unidade === "sessao") return `${t.atual}/${t.alvo}`;
@@ -37,7 +45,11 @@ export function ListaTarefas({ tarefas, marcha, nomeMarcha, hoje, idiomaFocoId }
     iniciar(async () => {
       if (t.chave === "flashcards") {
         const r = await alternarRevisao(idiomaFocoId, hoje);
-        toast[r.ok ? "success" : "error"](r.ok ? "Revisão marcada." : (r.erro ?? "Falhou."));
+        if (!r.ok) {
+          toast.error(r.erro ?? "Falhou.");
+          return;
+        }
+        toast.success(r.revisou ? "Revisão marcada." : "Revisão desmarcada.");
         return;
       }
       const r =
@@ -91,17 +103,29 @@ function Bloco({
       <ul className="space-y-1">
         {tarefas.map((t) => (
           <li key={t.chave} className="flex items-center gap-3 py-1.5">
-            {RESOLVE_DIRETO.has(t.chave) && !t.cumprida ? (
+            {RESOLVE_DIRETO.has(t.chave) && (!t.cumprida || ALTERNAVEL.has(t.chave)) ? (
               <button
                 type="button"
-                aria-label={`Concluir: ${t.titulo}`}
+                aria-label={t.cumprida ? `Desmarcar: ${t.titulo}` : `Concluir: ${t.titulo}`}
                 onClick={() => resolver(t)}
-                className="size-5 shrink-0 rounded-md border-2 border-borda-forte outline-none hover:border-texto-3 focus-visible:ring-2 focus-visible:ring-lime-500"
-              />
+                className={cn(
+                  "grid size-5 shrink-0 place-items-center rounded-md border-2 outline-none focus-visible:ring-2 focus-visible:ring-lime-500",
+                  t.cumprida
+                    ? "border-sucesso bg-sucesso text-white"
+                    : "border-borda-forte hover:border-texto-3",
+                )}
+              >
+                {t.cumprida ? <Check className="size-3" strokeWidth={3} /> : null}
+              </button>
             ) : (
               <Link
-                href="/registro"
-                aria-label={`Registrar: ${t.titulo}`}
+                href={t.cumprida ? "/historico" : "/registro"}
+                aria-label={
+                  t.cumprida
+                    ? `Ver e apagar o que concluiu: ${t.titulo}`
+                    : `Registrar: ${t.titulo}`
+                }
+                title={t.cumprida ? "Abrir o histórico para apagar o registro" : undefined}
                 className={cn(
                   "grid size-5 shrink-0 place-items-center rounded-md border-2 outline-none focus-visible:ring-2 focus-visible:ring-lime-500",
                   t.cumprida
