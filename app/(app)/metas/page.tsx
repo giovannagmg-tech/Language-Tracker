@@ -4,6 +4,7 @@ import { CabecalhoPagina } from "@/components/app/cabecalho-pagina";
 import { AnelProgresso } from "@/components/graficos/primitivos";
 import { Autoavaliacao } from "@/components/metas/autoavaliacao";
 import { EditorPalavras } from "@/components/metas/editor-palavras";
+import { MetasLivres } from "@/components/metas/metas-livres";
 import { corDaMeta, corDoEstado } from "@/lib/domain/metas";
 import { degrausAte } from "@/lib/domain/niveis";
 import { ROTULO_PILAR } from "@/lib/domain/tipos";
@@ -30,6 +31,12 @@ export default async function MetasPage() {
         icone={Target}
         titulo="Metas"
         subtitulo="Palavras, nível, conversação e o painel mensal"
+      />
+
+      <MetasLivres
+        metas={e.metasLivres}
+        idiomas={e.idiomas}
+        resumo={e.resumoMetasLivres}
       />
 
       {/* Painel mensal — cinco indicadores, cor rosa */}

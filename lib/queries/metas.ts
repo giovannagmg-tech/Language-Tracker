@@ -8,6 +8,12 @@ import {
   type ProgressoCamada,
 } from "@/lib/domain/camadas";
 import { hoje as hojeLocal, mesDe, semanaDe, somaDias } from "@/lib/domain/datas";
+import {
+  avaliarMetaLivre,
+  ordenarMetasLivres,
+  resumoDaLista,
+  type MetaLivreAvaliada,
+} from "@/lib/domain/metas-livres";
 import { progressoMeta, type ProgressoMeta } from "@/lib/domain/metas";
 import { progressoNivel } from "@/lib/domain/niveis";
 import {
@@ -21,6 +27,8 @@ import type { RevisaoDominio, SessaoDominio } from "@/lib/domain/modelos";
 import type { Atividade, Categoria, Nivel, Pilar, TempoDoDia } from "@/lib/domain/tipos";
 import { supabaseServidor } from "@/lib/supabase/server";
 import type { IdiomaResumo } from "./hoje";
+
+export type { MetaLivreAvaliada };
 
 export type MetaPainel = {
   id: string;
@@ -68,6 +76,8 @@ export type FocoDoMes = {
 export type EstadoMetas = {
   hoje: string;
   idiomas: IdiomaResumo[];
+  metasLivres: MetaLivreAvaliada[];
+  resumoMetasLivres: { total: number; concluidas: number; atrasadas: number };
   painelMensal: MetaPainel[];
   palavras: MetaPalavras[];
   niveis: MetaNivel[];
@@ -100,6 +110,7 @@ export const carregarMetas = cache(async function carregarMetas(): Promise<Estad
     { data: vocabRaw },
     { data: blocoRaw },
     { data: tarefasRaw },
+    { data: metasLivresRaw },
   ] = await Promise.all([
     supabase.from("config").select("faixas_frequencia").maybeSingle(),
     supabase
@@ -127,6 +138,10 @@ export const carregarMetas = cache(async function carregarMetas(): Promise<Estad
       .gte("data_fim", hoje)
       .maybeSingle(),
     supabase.from("tarefas").select("idioma_id").eq("tipo", "autoavaliacao").eq("estado", "aberta"),
+    supabase
+      .from("metas_livres")
+      .select("id, idioma_id, titulo, unidade, alvo, feito, prazo, concluida_em, criado_em, ativa, nota")
+      .eq("ativa", true),
   ]);
 
   const idiomas: IdiomaResumo[] = (idiomasRaw ?? []).map((i) => ({
@@ -263,9 +278,32 @@ export const carregarMetas = cache(async function carregarMetas(): Promise<Estad
     audioSemana: daSemana.some((s) => s.atividade === "audio_grupo"),
   };
 
+  const metasLivres = ordenarMetasLivres(
+    (metasLivresRaw ?? []).map((m) =>
+      avaliarMetaLivre(
+        {
+          id: m.id,
+          idiomaId: m.idioma_id,
+          titulo: m.titulo,
+          unidade: m.unidade,
+          alvo: m.alvo,
+          feito: m.feito,
+          prazo: m.prazo,
+          concluidaEm: m.concluida_em,
+          // `criado_em` é timestamptz; o dia civil é o que a regra usa.
+          criadaEm: m.criado_em.slice(0, 10),
+          ativa: m.ativa,
+        },
+        hoje,
+      ),
+    ),
+  );
+
   return {
     hoje,
     idiomas,
+    metasLivres,
+    resumoMetasLivres: resumoDaLista(metasLivres),
     painelMensal,
     palavras,
     niveis,

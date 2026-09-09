@@ -701,6 +701,62 @@ export type Database = {
           },
         ]
       }
+      metas_livres: {
+        Row: {
+          alvo: number
+          ativa: boolean
+          atualizado_em: string
+          concluida_em: string | null
+          criado_em: string
+          feito: number
+          id: string
+          idioma_id: string | null
+          nota: string | null
+          prazo: string | null
+          titulo: string
+          unidade: string
+          user_id: string
+        }
+        Insert: {
+          alvo: number
+          ativa?: boolean
+          atualizado_em?: string
+          concluida_em?: string | null
+          criado_em?: string
+          feito?: number
+          id?: string
+          idioma_id?: string | null
+          nota?: string | null
+          prazo?: string | null
+          titulo: string
+          unidade?: string
+          user_id: string
+        }
+        Update: {
+          alvo?: number
+          ativa?: boolean
+          atualizado_em?: string
+          concluida_em?: string | null
+          criado_em?: string
+          feito?: number
+          id?: string
+          idioma_id?: string | null
+          nota?: string | null
+          prazo?: string | null
+          titulo?: string
+          unidade?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metas_livres_idioma_id_fkey"
+            columns: ["idioma_id"]
+            isOneToOne: false
+            referencedRelation: "idiomas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pontos_gramaticais: {
         Row: {
           atualizado_em: string
