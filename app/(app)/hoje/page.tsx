@@ -39,9 +39,8 @@ export default async function HojePage() {
         <PisoDiario
           hoje={e.hoje}
           idiomas={e.idiomas}
-          idiomaFocoId={e.idiomaFocoId}
           idiomasRevisados={e.revisoesDoDia.filter((r) => r.revisou).map((r) => r.idiomaId)}
-          minutosFala={e.piso.minutosFala}
+          minutosFalaPorIdioma={e.minutosFalaPorIdioma}
         />
 
         <div className="grid gap-6 lg:grid-cols-2">

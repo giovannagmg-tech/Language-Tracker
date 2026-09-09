@@ -7,7 +7,13 @@ import {
   somaDias,
   type DataISO,
 } from "@/lib/domain/datas";
-import { diasComPiso, diasComRegistro, pisoDoDia, type Piso } from "@/lib/domain/piso";
+import {
+  diasComPiso,
+  diasComRegistro,
+  minutosFalaPorIdioma,
+  pisoDoDia,
+  type Piso,
+} from "@/lib/domain/piso";
 import { tarefasDoDia, pendentesDoDia } from "@/lib/domain/marchas";
 import { avaliarSeisRegras, regrasEmRisco, type RegraAvaliada } from "@/lib/domain/regras";
 import { faltamParaRecorde, maiorSequencia, sequencia } from "@/lib/domain/sequencias";
@@ -41,6 +47,8 @@ export type EstadoHoje = {
   idiomas: IdiomaResumo[];
   idiomaFocoId: string;
   piso: Piso;
+  /** Minutos de fala de hoje por idioma; idioma sem fala não aparece. */
+  minutosFalaPorIdioma: Record<string, number>;
   tarefas: TarefaAvaliada[];
   pendentes: number;
   regras: RegraAvaliada[];
@@ -186,6 +194,7 @@ export const carregarHoje = cache(async function carregarHoje(): Promise<EstadoH
     idiomas,
     idiomaFocoId: blocoRaw?.idioma_foco ?? idiomas[0]?.id ?? "",
     piso,
+    minutosFalaPorIdioma: minutosFalaPorIdioma(sessoesDoDia),
     tarefas,
     pendentes: pendentesDoDia(tarefas),
     regras,

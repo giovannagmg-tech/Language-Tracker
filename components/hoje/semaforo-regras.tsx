@@ -66,43 +66,53 @@ export function SemaforoRegras({ regras, hoje, idiomaFocoId }: Props) {
       <h2 id="regras-titulo" className="mb-3 text-h2 text-texto">
         As seis regras
       </h2>
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {regras.map((regra) => {
           const cor = CORES[regra.estado];
           const expandida = aberta === regra.numero;
           return (
             <div
               key={regra.numero}
-              className="rounded-[10px] bg-superficie-2 px-3 py-2"
+              className="flex flex-col rounded-[10px] bg-superficie-2 p-3"
             >
-              <div className="flex items-center gap-2">
-                <span aria-hidden className={cn("size-2 shrink-0 rounded-full", cor.ponto)} />
-                <button
-                  type="button"
-                  onClick={() => setAberta(expandida ? null : regra.numero)}
-                  aria-expanded={expandida}
-                  className="flex-1 truncate text-left text-pequeno text-texto outline-none focus-visible:ring-2 focus-visible:ring-lime-500"
-                >
-                  <span className="tabular">{regra.numero}</span> · {regra.curto}
-                </button>
-                {regra.acao && regra.rotuloAcao ? (
-                  <button
-                    type="button"
-                    onClick={() => executar(regra.acao as AcaoRegra)}
-                    className={cn(
-                      "shrink-0 text-pequeno font-semibold underline underline-offset-2",
-                      cor.texto,
-                    )}
-                  >
-                    {regra.rotuloAcao}
-                  </button>
-                ) : null}
-              </div>
+              <button
+                type="button"
+                onClick={() => setAberta(expandida ? null : regra.numero)}
+                aria-expanded={expandida}
+                className="flex items-start gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-lime-500"
+              >
+                <span
+                  aria-hidden
+                  className={cn("mt-1.5 size-2 shrink-0 rounded-full", cor.ponto)}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-rotulo uppercase text-texto-3">
+                    Regra <span className="tabular">{regra.numero}</span>
+                  </span>
+                  <span className="mt-0.5 block text-pequeno text-texto">{regra.titulo}</span>
+                </span>
+              </button>
+
               {expandida ? (
                 <p className="mt-2 border-t border-borda pt-2 text-pequeno text-texto-2">
-                  <span className="block font-medium text-texto">{regra.titulo}</span>
                   {regra.mensagem}
                 </p>
+              ) : null}
+
+              {/* A ação ganha linha própria: disputando espaço com o título
+                  numa coluna estreita, ela vencia e o título sumia. */}
+              {regra.acao && regra.rotuloAcao ? (
+                <button
+                  type="button"
+                  onClick={() => executar(regra.acao as AcaoRegra)}
+                  className={cn(
+                    "mt-3 h-8 w-full rounded-full border border-current px-3 text-pequeno font-semibold outline-none",
+                    "focus-visible:ring-2 focus-visible:ring-lime-500 focus-visible:ring-offset-2",
+                    cor.texto,
+                  )}
+                >
+                  {regra.rotuloAcao}
+                </button>
               ) : null}
             </div>
           );

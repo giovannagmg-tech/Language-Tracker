@@ -168,6 +168,12 @@ export function GradeCalor({
  * Medidor de anel — o componente-assinatura do design system (docs/07, 2.4).
  * O percentual grande no centro, o valor absoluto embaixo, e o percentual
  * repetido em negrito. A repetição é intencional.
+ *
+ * O documento fixa 44px no centro do anel **grande** (160px). O anel compacto
+ * (116px) herdava o mesmo tamanho, e "100%" a 44px mede mais que o vão interno
+ * de 98px — o número vazava por cima do traço. O corpo agora sai do diâmetro:
+ * 0,275 × 160 = 44px, exatamente o valor do documento, e o compacto encolhe
+ * junto em vez de estourar.
  */
 export function AnelProgresso({
   progresso,
@@ -187,6 +193,7 @@ export function AnelProgresso({
   const raio = (diametro - espessura) / 2;
   const circunferencia = 2 * Math.PI * raio;
   const preenchido = Math.min(1, Math.max(0, progresso));
+  const corpoCentro = Math.round(diametro * 0.275);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -212,12 +219,19 @@ export function AnelProgresso({
             transform={`rotate(-90 ${diametro / 2} ${diametro / 2})`}
           />
         </svg>
-        <span className="absolute inset-0 grid place-items-center text-display text-texto">
+        <span
+          className="absolute inset-0 grid place-items-center font-bold tabular text-texto"
+          style={{
+            fontSize: `${corpoCentro}px`,
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+          }}
+        >
           {fmtPct0(progresso)}
         </span>
       </div>
-      <p className="mt-3 text-numero-sm text-texto">{absoluto}</p>
-      <p className="mt-0.5 text-pequeno text-texto-2">{contexto}</p>
+      <p className="mt-3 max-w-full text-balance text-numero-sm text-texto">{absoluto}</p>
+      <p className="mt-0.5 max-w-full text-balance text-pequeno text-texto-2">{contexto}</p>
       <p className="mt-1 text-corpo font-semibold text-texto">{fmtPct0(progresso)}</p>
     </div>
   );

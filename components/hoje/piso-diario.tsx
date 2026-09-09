@@ -11,9 +11,8 @@ import { cn } from "@/lib/utils";
 type Props = {
   hoje: string;
   idiomas: IdiomaResumo[];
-  idiomaFocoId: string;
   idiomasRevisados: string[];
-  minutosFala: number;
+  minutosFalaPorIdioma: Record<string, number>;
 };
 
 /**
@@ -24,9 +23,8 @@ type Props = {
 export function PisoDiario({
   hoje,
   idiomas,
-  idiomaFocoId,
   idiomasRevisados,
-  minutosFala,
+  minutosFalaPorIdioma,
 }: Props) {
   const [, iniciar] = useTransition();
   const [revisados, marcarOtimista] = useOptimistic(
@@ -34,8 +32,15 @@ export function PisoDiario({
     (atual: string[], idiomaId: string) =>
       atual.includes(idiomaId) ? atual.filter((i) => i !== idiomaId) : [...atual, idiomaId],
   );
-  const [fala, somarOtimista] = useOptimistic(minutosFala, (atual: number, mais: number) => atual + mais);
+  const [falaPorIdioma, somarOtimista] = useOptimistic(
+    minutosFalaPorIdioma,
+    (atual: Record<string, number>, idiomaId: string) => ({
+      ...atual,
+      [idiomaId]: (atual[idiomaId] ?? 0) + 1,
+    }),
+  );
 
+  const fala = Object.values(falaPorIdioma).reduce((a, b) => a + b, 0);
   const temFlashcards = revisados.length > 0;
   const temFala = fala >= 1;
   const cumprido = temFlashcards && temFala;
@@ -48,15 +53,15 @@ export function PisoDiario({
     });
   }
 
-  function falarUmMinuto() {
+  function falarUmMinuto(idioma: IdiomaResumo) {
     iniciar(async () => {
-      somarOtimista(1);
-      const r = await registrarUmMinuto(idiomaFocoId);
+      somarOtimista(idioma.id);
+      const r = await registrarUmMinuto(idioma.id);
       if (!r.ok) {
         toast.error(r.erro);
         return;
       }
-      toast.success("1 minuto de fala registrado.", {
+      toast.success(`1 minuto de fala em ${idioma.nome}.`, {
         duration: 30_000,
         action: { label: "Desfazer", onClick: () => void excluirSessao(r.id) },
       });
@@ -121,23 +126,42 @@ export function PisoDiario({
             <Marcador ativo={temFala} />
             <span className="text-h3 text-texto">1 minuto de fala</span>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={falarUmMinuto}
-              className="h-9 rounded-full bg-texto px-4 text-corpo font-medium text-fundo outline-none focus-visible:ring-2 focus-visible:ring-lime-500 focus-visible:ring-offset-2"
-            >
-              Falei 1 min
-            </button>
-            <span className="text-pequeno text-texto-2 tabular">
-              {fala} min hoje
-            </span>
+          {/* Um botão por idioma, como nos flashcards: a sessão sempre teve
+              idioma, mas a tela gravava tudo no idioma-foco. */}
+          <div className="flex flex-wrap gap-2">
+            {idiomas.map((idioma) => {
+              const min = falaPorIdioma[idioma.id] ?? 0;
+              return (
+                <button
+                  key={idioma.id}
+                  type="button"
+                  onClick={() => falarUmMinuto(idioma)}
+                  aria-label={`Registrar 1 minuto de fala em ${idioma.nome}`}
+                  className={cn(
+                    "h-9 rounded-full border px-3 text-corpo outline-none transition-colors",
+                    "focus-visible:ring-2 focus-visible:ring-lime-500 focus-visible:ring-offset-2",
+                    min > 0
+                      ? "border-sucesso bg-sucesso-bg font-medium text-sucesso"
+                      : "border-borda-forte text-texto-2 hover:border-texto-3",
+                  )}
+                >
+                  <span className="mr-1.5">{idioma.bandeira}</span>
+                  {idioma.nome}
+                  {min > 0 ? <span className="ml-1.5 tabular">+{min}</span> : null}
+                </button>
+              );
+            })}
           </div>
+          <p className="mt-2 text-pequeno text-texto-2 tabular">
+            {fala === 0 ? "nada falado hoje" : `${fala} min hoje`}
+          </p>
         </div>
       </div>
 
       <p className="mt-5 border-t border-borda pt-4 text-pequeno text-texto-2">
-        O piso não depende da marcha.
+        <span className="font-medium text-texto">Piso</span> é o mínimo do dia:
+        revisar flashcards e falar pelo menos 1 minuto. Vale em qualquer idioma e
+        não depende da marcha — é igual na 1 e na 3.
       </p>
     </section>
   );

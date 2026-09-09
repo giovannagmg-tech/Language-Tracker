@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { diasComPiso, diasComRegistro, pisoDoDia } from "@/lib/domain/piso";
+import {
+  diasComPiso,
+  diasComRegistro,
+  minutosFalaDoDia,
+  minutosFalaPorIdioma,
+  pisoDoDia,
+} from "@/lib/domain/piso";
 import { sequencia } from "@/lib/domain/sequencias";
 import { revisao, sessao } from "../fixtures/dominio";
 
@@ -96,5 +102,39 @@ describe("dias com piso e dias com registro", () => {
     const hoje = "2026-09-09";
     expect(sequencia(diasComRegistro(sessoes, revisoes), hoje)).toBe(3);
     expect(sequencia(diasComPiso(sessoes, revisoes), hoje)).toBe(1);
+  });
+});
+
+describe("minutos de fala por idioma", () => {
+  it("separa o que foi falado em cada idioma", () => {
+    const porIdioma = minutosFalaPorIdioma([
+      sessao(DIA, "fala_sozinha", 5, { idiomaId: "ingles" }),
+      sessao(DIA, "fala_sozinha", 3, { idiomaId: "espanhol" }),
+      sessao(DIA, "fala_sozinha", 2, { idiomaId: "ingles" }),
+    ]);
+    expect(porIdioma).toEqual({ ingles: 7, espanhol: 3 });
+  });
+
+  it("idioma sem fala fica de fora do mapa, não com zero", () => {
+    const porIdioma = minutosFalaPorIdioma([
+      sessao(DIA, "flashcards", 20, { idiomaId: "frances" }),
+      sessao(DIA, "fala_sozinha", 1, { idiomaId: "ingles" }),
+    ]);
+    expect(porIdioma).toEqual({ ingles: 1 });
+    expect(porIdioma.frances ?? 0).toBe(0);
+  });
+
+  it("a soma do mapa bate com o total do dia", () => {
+    const sessoes = [
+      sessao(DIA, "fala_sozinha", 4, { idiomaId: "ingles" }),
+      sessao(DIA, "audio_grupo", 2, { idiomaId: "espanhol" }),
+      sessao(DIA, "flashcards", 15, { idiomaId: "frances" }),
+    ];
+    const soma = Object.values(minutosFalaPorIdioma(sessoes)).reduce((a, b) => a + b, 0);
+    expect(soma).toBe(minutosFalaDoDia(sessoes));
+  });
+
+  it("dia sem fala nenhuma devolve mapa vazio", () => {
+    expect(minutosFalaPorIdioma([sessao(DIA, "flashcards", 10)])).toEqual({});
   });
 });

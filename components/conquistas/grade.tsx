@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Lock, Share2, Trophy } from "lucide-react";
+import { Lock, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { IconeConquista } from "@/components/conquistas/icones";
 import { recalcularConquistas } from "@/lib/actions/acervo";
 import type { CategoriaConquista } from "@/lib/domain/tipos";
 import type { ConquistaNaTela, EstadoConquistas } from "@/lib/queries/acervo";
@@ -167,14 +168,22 @@ function CardDeConquista({ item }: { item: ConquistaNaTela }) {
       )}
       style={item.conquistada ? { background: item.cores.bg } : undefined}
     >
-      <div
-        className="mx-auto grid size-12 place-items-center rounded-full bg-superficie"
-        style={{ color: item.conquistada ? item.cores.forte : "var(--cor-texto-3)" }}
-      >
-        {item.conquistada ? (
-          <Trophy className="size-6" strokeWidth={1.75} />
-        ) : (
-          <Lock className="size-5" strokeWidth={1.75} />
+      {/* O ícone é o da conquista mesmo — inclusive bloqueada, porque ver o
+          que está por vir vale mais que ver um cadeado. O cadeado vira selo. */}
+      <div className="relative mx-auto size-12">
+        <div
+          className="grid size-12 place-items-center rounded-full bg-superficie"
+          style={{ color: item.conquistada ? item.cores.forte : "var(--cor-texto-3)" }}
+        >
+          <IconeConquista codigo={item.definicao.codigo} className="size-6" />
+        </div>
+        {item.conquistada ? null : (
+          <span
+            aria-hidden
+            className="absolute -bottom-0.5 -right-0.5 grid size-5 place-items-center rounded-full bg-superficie-2"
+          >
+            <Lock className="size-3 text-texto-3" strokeWidth={2.5} />
+          </span>
         )}
       </div>
 

@@ -18,6 +18,23 @@ export function minutosFalaDoDia(sessoes: Pick<SessaoDominio, "minutosFala">[]):
   return sessoes.reduce((total, s) => total + s.minutosFala, 0);
 }
 
+/**
+ * Minutos de fala do dia repartidos por idioma. A **regra** do piso continua
+ * indiferente ao idioma — 1 minuto em qualquer um cumpre —, mas a tela precisa
+ * dizer em qual idioma você falou, do mesmo jeito que já faz com os flashcards.
+ * Idioma sem fala não aparece no mapa; quem consulta usa `?? 0`.
+ */
+export function minutosFalaPorIdioma(
+  sessoes: Pick<SessaoDominio, "idiomaId" | "minutosFala">[],
+): Record<string, number> {
+  const porIdioma: Record<string, number> = {};
+  for (const s of sessoes) {
+    if (s.minutosFala <= 0) continue;
+    porIdioma[s.idiomaId] = (porIdioma[s.idiomaId] ?? 0) + s.minutosFala;
+  }
+  return porIdioma;
+}
+
 export function temRevisaoNoDia(
   revisoes: Pick<RevisaoDominio, "revisou">[],
 ): boolean {

@@ -19,10 +19,16 @@ export function Sequencias({ streakRegistro, streakPiso, recorde, faltamRecorde 
         <div>
           <p className="text-rotulo uppercase text-texto-3">Dias com registro</p>
           <p className="text-display text-texto tabular">{streakRegistro}</p>
+          <p className="mt-1 text-pequeno text-texto-2">
+            dias seguidos com qualquer coisa registrada
+          </p>
         </div>
         <div>
           <p className="text-rotulo uppercase text-texto-3">Dias com o piso</p>
           <p className="text-display text-texto tabular">{streakPiso}</p>
+          <p className="mt-1 text-pequeno text-texto-2">
+            dias seguidos com flashcards <span className="text-texto">e</span> 1 min de fala
+          </p>
         </div>
       </div>
       <p className="mt-4 border-t border-borda pt-4 text-pequeno text-texto-2">
