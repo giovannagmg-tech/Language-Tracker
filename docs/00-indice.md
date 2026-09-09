@@ -13,6 +13,7 @@ App web pessoal de gestão de estudos de idiomas. Usuária única. Inglês, espa
 | 07 | [Design system](07-design-system.md) | Tokens, componentes, regras de cor |
 | 08 | [Roadmap](08-roadmap.md) | Fases entregáveis + pontos confirmados |
 | 09 | [Linha de base 2026](09-linha-de-base-2026.md) | O export real do Toggl — critério de aceitação dos indicadores |
+| 10 | [Calendário de estudos](10-calendario-de-estudos.md) | Briefing da visão de mês e do agendamento de tarefas — **não implementado** |
 
 **Ordem de leitura para quem vai construir:** 01 → 02 → 03 → 05 → 04 → 07 → 06 → 08.
 
