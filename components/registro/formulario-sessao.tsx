@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { GrupoDeChips, type OpcaoChip } from "@/components/ui/chips";
 import { excluirSessao, registrarSessao } from "@/lib/actions/sessoes";
+import { concluirTarefaComSessao } from "@/lib/actions/tarefas-manuais";
 import { ehSexta } from "@/lib/domain/datas";
 import {
   DEFAULTS,
@@ -67,6 +68,14 @@ type Props = {
   pilaresDoDia: (Pilar | null)[];
   compacto?: boolean;
   aoSalvar?: () => void;
+  /** RN-1207: rascunho vindo de uma tarefa do calendário. */
+  inicial?: {
+    idiomaId?: string;
+    pilar?: Pilar | null;
+    data?: string;
+    duracaoMin?: number;
+    tarefaId?: string;
+  };
 };
 
 export function FormularioSessao({
@@ -77,6 +86,7 @@ export function FormularioSessao({
   pilaresDoDia,
   compacto = false,
   aoSalvar,
+  inicial,
 }: Props) {
   // Telemetria do tempo de registro: marcado no mount, nunca durante o render.
   const abertoEm = useRef(0);
@@ -85,12 +95,12 @@ export function FormularioSessao({
   }, []);
   const [enviando, iniciar] = useTransition();
 
-  const [idiomaId, setIdiomaId] = useState(idiomaFocoId);
+  const [idiomaId, setIdiomaId] = useState(inicial?.idiomaId ?? idiomaFocoId);
   const [atividade, setAtividade] = useState<Atividade>("fala_sozinha");
-  const [pilar, setPilar] = useState<Pilar | null>(DEFAULTS.fala_sozinha.pilar);
+  const [pilar, setPilar] = useState<Pilar | null>(inicial?.pilar ?? DEFAULTS.fala_sozinha.pilar);
   const [tempo, setTempo] = useState<TempoDoDia>(DEFAULTS.fala_sozinha.tempo);
-  const [data, setData] = useState(hoje);
-  const [duracao, setDuracao] = useState(40);
+  const [data, setData] = useState(inicial?.data ?? hoje);
+  const [duracao, setDuracao] = useState(inicial?.duracaoMin ?? 40);
   const [expandido, setExpandido] = useState(false);
   const [palavrasNovas, setPalavrasNovas] = useState(0);
   const [minutosFala, setMinutosFala] = useState<number | "">("");
@@ -180,6 +190,13 @@ export function FormularioSessao({
           },
         },
       );
+
+      // RN-1207: é o salvar da sessão que conclui a tarefa, nunca o contrário.
+      // Sessão falhou, a tarefa continua aberta — que é a verdade.
+      if (inicial?.tarefaId) {
+        const fecho = await concluirTarefaComSessao(inicial.tarefaId, resultado.id);
+        if (!fecho.ok) toast.error(fecho.erro ?? "A sessão foi salva, mas a tarefa não fechou.");
+      }
 
       abertoEm.current = Date.now();
       setPalavrasNovas(0);

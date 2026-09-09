@@ -5,9 +5,8 @@ import type { IdiomaDoCalendario } from "@/lib/queries/calendario";
 import { cn } from "@/lib/utils";
 
 /**
- * Fase A: só-leitura. A célula leva ao histórico daquele dia — o painel do dia
- * com edição é a fase B. Server Component: não há interação, não há motivo
- * para mandar JavaScript.
+ * A célula leva ao painel daquele dia. Server Component: a grade em si não tem
+ * interação, então não há motivo para mandar JavaScript.
  */
 export function GradeDoMes({
   semanas,
@@ -137,21 +136,15 @@ function Celula({
     "flex h-24 w-full flex-col rounded-[10px] border p-1.5 text-left transition-colors",
     dia.noMes ? "bg-superficie" : "bg-transparent",
     dia.hoje ? "border-texto" : "border-borda",
-    !vazio && "hover:border-texto-3",
+    vazio ? "hover:border-borda-forte" : "hover:border-texto-3",
   );
 
-  if (vazio) {
-    return (
-      <div className={classe} aria-label={`${dia.data}: nada registrado`}>
-        {conteudo}
-      </div>
-    );
-  }
-
+  // Dia vazio continua discreto — sem borda de hover, sem chamar atenção —,
+  // mas é clicável: é justamente ali que ela planeja o que ainda não existe.
   return (
     <Link
-      href={`/historico?de=${dia.data}&ate=${dia.data}`}
-      aria-label={`${dia.data}: ${descricao}`}
+      href={`/calendario/${dia.data}`}
+      aria-label={`${dia.data}: ${vazio ? "nada registrado" : descricao}`}
       className={cn(classe, "outline-none focus-visible:ring-2 focus-visible:ring-lime-500")}
     >
       {conteudo}

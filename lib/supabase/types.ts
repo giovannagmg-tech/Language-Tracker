@@ -1201,16 +1201,23 @@ export type Database = {
           concluida_em: string | null
           criado_em: string
           data_prevista: string
+          descricao: string | null
           dispensada_em: string | null
+          do_dia: boolean
+          duracao_prevista_min: number | null
           estado: Database["public"]["Enums"]["estado_tarefa"]
+          hora_prevista: string | null
           id: string
           idioma_id: string | null
           janela: Database["public"]["Enums"]["janela_tarefa"]
           meta_id: string | null
+          pilar: Database["public"]["Enums"]["pilar"] | null
           ponto_gramatical_id: string | null
           quantidade_exigida: number
           quantidade_feita: number
           recorrencia: Database["public"]["Enums"]["recorrencia_tarefa"]
+          recorrencia_ate: string | null
+          serie_id: string | null
           sessao_id: string | null
           tipo: Database["public"]["Enums"]["tipo_tarefa"]
           titulo: string
@@ -1224,16 +1231,23 @@ export type Database = {
           concluida_em?: string | null
           criado_em?: string
           data_prevista: string
+          descricao?: string | null
           dispensada_em?: string | null
+          do_dia?: boolean
+          duracao_prevista_min?: number | null
           estado?: Database["public"]["Enums"]["estado_tarefa"]
+          hora_prevista?: string | null
           id?: string
           idioma_id?: string | null
           janela?: Database["public"]["Enums"]["janela_tarefa"]
           meta_id?: string | null
+          pilar?: Database["public"]["Enums"]["pilar"] | null
           ponto_gramatical_id?: string | null
           quantidade_exigida?: number
           quantidade_feita?: number
           recorrencia?: Database["public"]["Enums"]["recorrencia_tarefa"]
+          recorrencia_ate?: string | null
+          serie_id?: string | null
           sessao_id?: string | null
           tipo: Database["public"]["Enums"]["tipo_tarefa"]
           titulo: string
@@ -1247,16 +1261,23 @@ export type Database = {
           concluida_em?: string | null
           criado_em?: string
           data_prevista?: string
+          descricao?: string | null
           dispensada_em?: string | null
+          do_dia?: boolean
+          duracao_prevista_min?: number | null
           estado?: Database["public"]["Enums"]["estado_tarefa"]
+          hora_prevista?: string | null
           id?: string
           idioma_id?: string | null
           janela?: Database["public"]["Enums"]["janela_tarefa"]
           meta_id?: string | null
+          pilar?: Database["public"]["Enums"]["pilar"] | null
           ponto_gramatical_id?: string | null
           quantidade_exigida?: number
           quantidade_feita?: number
           recorrencia?: Database["public"]["Enums"]["recorrencia_tarefa"]
+          recorrencia_ate?: string | null
+          serie_id?: string | null
           sessao_id?: string | null
           tipo?: Database["public"]["Enums"]["tipo_tarefa"]
           titulo?: string
@@ -1322,6 +1343,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      adicionar_idiomas_inativos: { Args: { alvo: string }; Returns: undefined }
       aplicar_dados_conta_principal: {
         Args: { p_email: string }
         Returns: string
