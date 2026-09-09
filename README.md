@@ -14,11 +14,15 @@ npm run dev
 
 ## Variáveis de ambiente
 
-| Variável | Onde encontrar | Obrigatória |
+| Variável | Onde encontrar | Visibility na Vercel |
 |---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL | sim |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon public | sim |
-| `EMAILS_PERMITIDOS` | você escolhe; separados por vírgula | sim |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL | **Config** |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon public | **Config** |
+| `EMAILS_PERMITIDOS` | você escolhe; separados por vírgula | **Secret** |
+
+As duas primeiras têm prefixo `NEXT_PUBLIC_`: são embutidas no bundle do navegador por definição, e a Vercel recusa marcá-las como *Secret*. Isso não é um vazamento — a chave anon identifica o projeto, não autoriza nada. Quem protege os dados é o RLS: toda tabela só devolve linhas com `user_id = auth.uid()`.
+
+`EMAILS_PERMITIDOS` só é lido no servidor e deve ficar como *Secret*.
 
 Não há cadastro aberto: um e-mail fora de `EMAILS_PERMITIDOS` é recusado no envio do link **e** na confirmação dele.
 
