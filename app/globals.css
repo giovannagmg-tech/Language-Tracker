@@ -20,6 +20,9 @@
   --cor-texto-3: #9aa095;
 
   /* sidebar e marca */
+  /* Largura da sidebar: uma variável só, lida pela barra e pelo conteúdo.
+     Minimizada, ela some do caminho sem sumir da navegação. */
+  --largura-sidebar: 210px;
   --cor-sidebar-bg: #1a1d18;
   --cor-sidebar-texto: #c9cec3;
   --cor-sidebar-hover: #262a22;
@@ -317,4 +320,11 @@
   [data-numero] {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Sidebar minimizada. O estado vive em `data-sidebar` no <html>, escrito antes
+   do primeiro frame pelo script do layout — sem isso a barra abriria larga e
+   encolheria na frente dela. */
+:root[data-sidebar="fechada"] {
+  --largura-sidebar: 68px;
 }

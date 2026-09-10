@@ -28,7 +28,7 @@ export default async function LayoutApp({ children }: { children: React.ReactNod
         streakPiso={estado.streakPiso}
         badges={{ hoje: badgeHoje, tarefas: tarefas.abertasHoje }}
       />
-      <main className="px-4 pb-24 pt-6 sm:px-6 sm:py-8 md:pb-8 md:pl-[234px] md:pr-6">
+      <main className="px-4 pb-24 pt-6 sm:px-6 sm:py-8 md:pb-8 md:pl-[calc(var(--largura-sidebar)+24px)] md:pr-6 transition-[padding] duration-200">
         <div className="mx-auto w-full max-w-[1280px]">{children}</div>
       </main>
       <BarraInferior badgeHoje={badgeHoje} />

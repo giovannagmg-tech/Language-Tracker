@@ -7,6 +7,7 @@ export type IdiomaConfig = {
   id: string;
   nome: string;
   bandeira: string;
+  cor: string;
   nivelInicial: Nivel;
   nivelAtual: Nivel;
   nivelMeta: Nivel;
@@ -40,7 +41,7 @@ export const carregarConfiguracoes = cache(async function carregarConfiguracoes(
     supabase.from("config").select("*").maybeSingle(),
     supabase
       .from("idiomas")
-      .select("id, nome, bandeira, nivel_inicial, nivel_atual, nivel_meta, data_meta_nivel, palavras_base, meta_palavras_dia, ativo")
+      .select("id, nome, bandeira, cor, nivel_inicial, nivel_atual, nivel_meta, data_meta_nivel, palavras_base, meta_palavras_dia, ativo")
       .order("ordem"),
     supabase.from("camadas").select("numero, nome, limiar").order("numero"),
   ]);
@@ -51,6 +52,7 @@ export const carregarConfiguracoes = cache(async function carregarConfiguracoes(
       id: i.id,
       nome: i.nome,
       bandeira: i.bandeira,
+      cor: i.cor,
       nivelInicial: i.nivel_inicial,
       nivelAtual: i.nivel_atual,
       nivelMeta: i.nivel_meta,

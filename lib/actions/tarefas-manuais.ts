@@ -267,3 +267,43 @@ export async function concluirTarefaComSessao(
   revalidar();
   return { ok: true };
 }
+
+/**
+ * Regra 3: o clube é compromisso marcado. Por isso a data vem dela, não de um
+ * palpite do app — marcar "daqui a uma semana" automaticamente seria a mesma
+ * intenção vaga que a regra existe para combater.
+ */
+export async function agendarClube(
+  data: string,
+  idiomaId: string | null,
+): Promise<{ ok: boolean; erro?: string }> {
+  if (!dataISO.safeParse(data).success) return { ok: false, erro: "Data inválida." };
+  if (data < hojeLocal()) return { ok: false, erro: "O clube é compromisso futuro." };
+  if (idiomaId !== null && !uuid.safeParse(idiomaId).success) {
+    return { ok: false, erro: "Idioma inválido." };
+  }
+
+  const { supabase, userId } = await sessao();
+
+  const { error } = await supabase.from("tarefas").insert({
+    user_id: userId,
+    tipo: "clube_conversacao",
+    automatica: false,
+    titulo: "Clube de conversação",
+    idioma_id: idiomaId,
+    data_prevista: data,
+    janela: "dia",
+    chave_idempotencia: `clube:${data}`,
+  });
+
+  if (error) {
+    // A chave de idempotência já barra o segundo agendamento no mesmo dia.
+    return {
+      ok: false,
+      erro: error.code === "23505" ? "Já existe clube marcado nesse dia." : error.message,
+    };
+  }
+
+  revalidar();
+  return { ok: true };
+}

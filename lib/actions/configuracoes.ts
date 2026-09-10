@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { bandeiraValida, corValida, slugLivre } from "@/lib/domain/idiomas";
 import { NIVEIS } from "@/lib/domain/tipos";
 import { supabaseServidor } from "@/lib/supabase/server";
 
@@ -156,4 +157,105 @@ export async function salvarCamadas(
   revalidatePath("/metas");
   revalidatePath("/flashcards");
   return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Criar idioma
+// ---------------------------------------------------------------------------
+
+const idiomaNovo = z.object({
+  nome: z.string().trim().min(1, "O idioma precisa de um nome.").max(40),
+  bandeira: z.string().trim().max(8).default(""),
+  cor: z.string().trim(),
+  nivelAtual: z.enum(NIVEIS).default("A0"),
+  nivelMeta: z.enum(NIVEIS).default("B2.1"),
+  metaPalavrasDia: z.coerce.number().int().min(0).max(100).default(5),
+  ativo: z.coerce.boolean().default(true),
+});
+
+/**
+ * Um idioma novo não é só uma linha em `idiomas`: sem as metas de palavras e
+ * de nível ele apareceria na tela de Metas como um buraco, e sem sincronizar
+ * as conquistas as `por_idioma` dele nasceriam faltando. As três coisas andam
+ * juntas ou o idioma nasce quebrado.
+ */
+export async function criarIdioma(
+  bruta: z.input<typeof idiomaNovo>,
+): Promise<{ ok: boolean; erro?: string; id?: string }> {
+  const parsed = idiomaNovo.safeParse(bruta);
+  if (!parsed.success) return { ok: false, erro: parsed.error.issues[0].message };
+
+  const d = parsed.data;
+  if (!corValida(d.cor)) return { ok: false, erro: "Cor inválida — use algo como #2F6FED." };
+  if (!bandeiraValida(d.bandeira)) {
+    return { ok: false, erro: "Bandeira precisa ser um emoji, não texto." };
+  }
+
+  const { supabase, userId } = await sessao();
+
+  const { data: existentes } = await supabase.from("idiomas").select("slug, ordem");
+  const slug = slugLivre(
+    d.nome,
+    (existentes ?? []).map((i) => i.slug),
+  );
+  const ordem = Math.max(0, ...(existentes ?? []).map((i) => i.ordem)) + 1;
+
+  const { data: criado, error } = await supabase
+    .from("idiomas")
+    .insert({
+      user_id: userId,
+      slug,
+      nome: d.nome,
+      bandeira: d.bandeira,
+      cor: d.cor,
+      ordem,
+      ativo: d.ativo,
+      nivel_inicial: d.nivelAtual,
+      nivel_atual: d.nivelAtual,
+      nivel_meta: d.nivelMeta,
+      meta_palavras_dia: d.metaPalavrasDia,
+    })
+    .select("id")
+    .single();
+
+  if (error) return { ok: false, erro: error.message };
+
+  const { error: erroMetas } = await supabase.from("metas").insert([
+    {
+      user_id: userId,
+      tipo: "palavras" as const,
+      idioma_id: criado.id,
+      titulo: `Palavras novas por dia — ${d.nome}`,
+      indicador: "palavras_dia",
+      valor_alvo: d.metaPalavrasDia,
+      periodicidade: "dia" as const,
+      cor: "longo_prazo" as const,
+    },
+    {
+      user_id: userId,
+      tipo: "nivel" as const,
+      idioma_id: criado.id,
+      titulo: `Nível — ${d.nome}`,
+      indicador: "nivel",
+      valor_alvo: 1,
+      periodicidade: "bloco" as const,
+      cor: "longo_prazo" as const,
+    },
+  ]);
+
+  if (erroMetas) {
+    // Idioma sem metas é idioma quebrado: desfaz em vez de deixar pela metade.
+    await supabase.from("idiomas").delete().eq("id", criado.id);
+    return { ok: false, erro: `Idioma não criado: ${erroMetas.message}` };
+  }
+
+  await supabase.rpc("sincronizar_conquistas", { uid: userId });
+
+  revalidatePath("/configuracoes");
+  revalidatePath("/metas");
+  revalidatePath("/hoje");
+  revalidatePath("/dashboard");
+  revalidatePath("/calendario");
+  revalidatePath("/conquistas");
+  return { ok: true, id: criado.id };
 }

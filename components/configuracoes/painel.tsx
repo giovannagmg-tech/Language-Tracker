@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { GrupoDeChips } from "@/components/ui/chips";
+import { NovoIdioma } from "@/components/configuracoes/novo-idioma";
 import {
   exportarBackup,
   exportarSessoesCSV,
@@ -164,6 +165,7 @@ function SecaoIdiomas({ estado }: { estado: EstadoConfiguracoes }) {
       {estado.idiomas.map((i) => (
         <FormularioIdioma key={i.id} idioma={i} />
       ))}
+      <NovoIdioma coresEmUso={estado.idiomas.map((i) => i.cor)} />
     </div>
   );
 }
