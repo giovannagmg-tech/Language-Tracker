@@ -5,6 +5,7 @@ import { AnelProgresso } from "@/components/graficos/primitivos";
 import { Autoavaliacao } from "@/components/metas/autoavaliacao";
 import { EditorPalavras } from "@/components/metas/editor-palavras";
 import { MetasLivres } from "@/components/metas/metas-livres";
+import { bordaDoIdioma } from "@/components/ui/idioma";
 import { corDaMeta, corDoEstado } from "@/lib/domain/metas";
 import { degrausAte } from "@/lib/domain/niveis";
 import { ROTULO_PILAR } from "@/lib/domain/tipos";
@@ -83,6 +84,7 @@ export default async function MetasPage() {
             <div
               key={p.idioma.id}
               className="rounded-card border border-borda bg-superficie p-6 shadow-card"
+              style={bordaDoIdioma(p.idioma)}
             >
               <div className="mb-4 flex items-baseline justify-between gap-3">
                 <p className="text-h3 text-texto">
@@ -140,6 +142,7 @@ export default async function MetasPage() {
               <div
                 key={n.idioma.id}
                 className="rounded-card border border-borda bg-superficie p-6 shadow-card"
+                style={bordaDoIdioma(n.idioma)}
               >
                 <div className="mb-4 flex items-baseline justify-between gap-3">
                   <p className="text-h3 text-texto">

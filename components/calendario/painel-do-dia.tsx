@@ -16,6 +16,7 @@ import {
   rascunhoDaTarefa,
   type TarefaManualAvaliada,
 } from "@/lib/domain/tarefas-manuais";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import { ROTULO_PILAR } from "@/lib/domain/tipos";
 import type { IdiomaDoCalendario } from "@/lib/queries/calendario";
 import type { EstadoDoDia } from "@/lib/queries/dia";
@@ -192,7 +193,6 @@ function Cartao({
               tarefa.concluida ? "text-texto-3 line-through" : "text-texto",
             )}
           >
-            {idioma ? <span className="mr-1.5">{idioma.bandeira}</span> : null}
             {tarefa.titulo}
             {tarefa.doDia ? (
               <Star
@@ -203,6 +203,7 @@ function Cartao({
           </p>
 
           <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-pequeno text-texto-3">
+            {idioma ? <PastilhaIdioma idioma={idioma} compacta /> : null}
             {mostrarData ? (
               <span className="text-perigo">
                 de {tarefa.data.split("-").reverse().slice(0, 2).join("/")}

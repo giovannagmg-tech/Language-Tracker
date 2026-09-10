@@ -48,16 +48,21 @@ export function bandeiraValida(valor: string): boolean {
   return pontos.every((c) => (c.codePointAt(0) ?? 0) > 0x1000);
 }
 
-/** Paleta sugerida na criação — separadas o bastante para não se confundirem. */
+/**
+ * Paleta sugerida na criação. Não foi escolhida a olho: cada cor alcança pelo
+ * menos 3:1 contra o fundo claro **e** contra o escuro — o mínimo para uma
+ * forma ser vista —, e a menor distância entre duas delas é 0,142, acima do
+ * limiar. Os testes guardam as duas propriedades.
+ */
 export const CORES_SUGERIDAS = [
-  "#2F6FED",
-  "#E4A11B",
-  "#D14D5A",
-  "#3E8E5A",
-  "#B0479E",
-  "#0E8A8A",
-  "#8A5A2B",
-  "#6B6B6B",
+  "#2F6FED", // azul       — inglês
+  "#C08A12", // âmbar      — espanhol
+  "#D14D5A", // vermelho   — francês
+  "#407262", // verde-petróleo
+  "#9835AC", // roxo
+  "#3AA63A", // verde
+  "#7996B4", // azul-acinzentado
+  "#CE5FCE", // rosa
 ] as const;
 
 /** Bandeiras oferecidas de atalho. Ela pode digitar qualquer outra. */
@@ -73,4 +78,60 @@ export function proximaCor(usadas: readonly string[]): string {
     CORES_SUGERIDAS.find((c) => !normalizadas.includes(c.toLowerCase())) ??
     CORES_SUGERIDAS[0]
   );
+}
+
+// ---------------------------------------------------------------------------
+// Distinção entre cores
+// ---------------------------------------------------------------------------
+
+type RGB = [number, number, number];
+
+function paraRgb(hex: string): RGB {
+  const c = hex.trim().replace("#", "");
+  const cheio = c.length === 3 ? [...c].map((x) => x + x).join("") : c;
+  return [0, 2, 4].map((i) => parseInt(cheio.slice(i, i + 2), 16) / 255) as RGB;
+}
+
+/**
+ * OKLab: distância nesse espaço acompanha a percepção bem melhor que a
+ * distância em RGB, onde dois verdes distintos parecem próximos e dois azuis
+ * parecidos parecem longe.
+ */
+function paraOklab([r, g, b]: RGB): RGB {
+  const lin = (v: number) => (v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+  const [R, G, B] = [lin(r), lin(g), lin(b)];
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ];
+}
+
+export function distanciaDeCores(a: string, b: string): number {
+  const [l1, a1, b1] = paraOklab(paraRgb(a));
+  const [l2, a2, b2] = paraOklab(paraRgb(b));
+  return Math.hypot(l1 - l2, a1 - a2, b1 - b2);
+}
+
+/**
+ * Abaixo disto duas cores viram a mesma num gráfico de barras pequeno.
+ *
+ * Calibrado, não chutado: o par mais próximo dos idiomas dela hoje é italiano
+ * × alemão, a 0,125. O limiar fica logo abaixo disso — apertar mais acusaria
+ * uma combinação que já existe e funciona.
+ */
+export const DISTANCIA_MINIMA = 0.11;
+
+/** Devolve a cor conflitante, ou `null` se a nova é distinguível de todas. */
+export function corConflitante(
+  nova: string,
+  existentes: readonly { nome: string; cor: string }[],
+): { nome: string; cor: string } | null {
+  for (const outra of existentes) {
+    if (distanciaDeCores(nova, outra.cor) < DISTANCIA_MINIMA) return outra;
+  }
+  return null;
 }

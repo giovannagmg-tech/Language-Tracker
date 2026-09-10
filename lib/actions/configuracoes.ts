@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { bandeiraValida, corValida, slugLivre } from "@/lib/domain/idiomas";
+import {
+  bandeiraValida,
+  corConflitante,
+  corValida,
+  slugLivre,
+} from "@/lib/domain/idiomas";
 import { NIVEIS } from "@/lib/domain/tipos";
 import { supabaseServidor } from "@/lib/supabase/server";
 
@@ -193,7 +198,18 @@ export async function criarIdioma(
 
   const { supabase, userId } = await sessao();
 
-  const { data: existentes } = await supabase.from("idiomas").select("slug, ordem");
+  const { data: existentes } = await supabase.from("idiomas").select("slug, ordem, nome, cor");
+
+  // Duas cores parecidas viram a mesma barra no gráfico. Avisa em vez de
+  // deixar criar e ela descobrir depois, olhando um gráfico que não separa.
+  const conflito = corConflitante(d.cor, existentes ?? []);
+  if (conflito) {
+    return {
+      ok: false,
+      erro: `Essa cor é quase igual à de ${conflito.nome}. Escolha outra — nos gráficos elas viram a mesma barra.`,
+    };
+  }
+
   const slug = slugLivre(
     d.nome,
     (existentes ?? []).map((i) => i.slug),

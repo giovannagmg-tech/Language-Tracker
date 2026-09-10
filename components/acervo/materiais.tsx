@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { GrupoDeChips } from "@/components/ui/chips";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import { avancarMaterial, salvarMaterial } from "@/lib/actions/acervo";
 import { TIPOS_MATERIAL, type TipoMaterial } from "@/lib/domain/tipos";
 import type { EstadoMateriais, MaterialNaTela } from "@/lib/queries/acervo";
@@ -34,10 +35,7 @@ export function PainelMateriais({ estado }: { estado: EstadoMateriais }) {
               key={item.idioma.id}
               className="rounded-card border border-dashed border-borda-forte bg-superficie p-6 text-center"
             >
-              <p className="text-h3 text-texto">
-                <span className="mr-2">{item.idioma.bandeira}</span>
-                {item.idioma.nome}
-              </p>
+              <PastilhaIdioma idioma={item.idioma} />
               <p className="mt-2 text-pequeno text-texto-2">
                 Nenhum material principal em {item.idioma.nome}.
               </p>
@@ -79,7 +77,7 @@ export function PainelMateriais({ estado }: { estado: EstadoMateriais }) {
           <ul className="divide-y divide-borda">
             {estado.secundarios.map((m) => (
               <li key={m.id} className="flex flex-wrap items-center gap-3 py-3">
-                <span className="shrink-0 text-pequeno">{m.idioma.bandeira}</span>
+                <PastilhaIdioma idioma={m.idioma} compacta mostrarNome={false} />
                 <span className="min-w-0 flex-1 text-corpo text-texto">{m.titulo}</span>
                 <span className="shrink-0 text-pequeno text-texto-3">
                   {ROTULO_TIPO_MATERIAL[m.tipo]}

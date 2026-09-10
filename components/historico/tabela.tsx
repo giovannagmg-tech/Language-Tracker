@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { excluirSessao } from "@/lib/actions/sessoes";
 import { ROTULO_ATIVIDADE, ROTULO_PILAR, ROTULO_TEMPO } from "@/lib/domain/tipos";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import { fmtHoras } from "@/lib/formatadores";
 import type { IdiomaHistorico, LinhaHistorico } from "@/lib/queries/historico";
 import { cn } from "@/lib/utils";
@@ -98,8 +99,10 @@ export function TabelaHistorico({
 
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        {idioma ? (
+                          <PastilhaIdioma idioma={idioma} inativo={!idioma.ativo} compacta />
+                        ) : null}
                         <span className="text-corpo text-texto">
-                          {idioma ? <span className="mr-1">{idioma.bandeira}</span> : null}
                           {ROTULO_ATIVIDADE[linha.atividade]}
                         </span>
                         <span
@@ -126,7 +129,7 @@ export function TabelaHistorico({
                         {linha.origem !== "manual"
                           ? ` · ${ROTULO_ORIGEM[linha.origem] ?? linha.origem}`
                           : ""}
-                        {idioma && !idioma.ativo ? " · idioma inativo" : ""}
+
                       </span>
 
                       {linha.nota ? (

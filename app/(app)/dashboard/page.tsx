@@ -15,6 +15,7 @@ import {
   GradeCalor,
   NumeroGrande,
 } from "@/components/graficos/primitivos";
+import { bordaDoIdioma } from "@/components/ui/idioma";
 import { fmtDataCurta, fmtHoras, fmtPct, fmtPct0 } from "@/lib/formatadores";
 import { chaveSemana, intervalo, somaDias } from "@/lib/domain/datas";
 import { ROTULO_PILAR, ROTULO_TEMPO, type Pilar, type TempoDoDia } from "@/lib/domain/tipos";
@@ -366,6 +367,7 @@ export default async function DashboardPage({
             <div
               key={c.idioma.id}
               className="rounded-card border border-borda bg-superficie p-6 shadow-card"
+              style={bordaDoIdioma(c.idioma)}
             >
               <p className="mb-4 text-h3 text-texto">
                 <span className="mr-2">{c.idioma.bandeira}</span>

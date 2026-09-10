@@ -10,6 +10,7 @@ import {
 } from "@/lib/actions/metas-livres";
 import { plural, type MetaLivreAvaliada } from "@/lib/domain/metas-livres";
 import type { EstadoSemaforo } from "@/lib/domain/tipos";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import type { IdiomaResumo } from "@/lib/queries/hoje";
 import { cn } from "@/lib/utils";
 
@@ -133,10 +134,12 @@ function CartaoMeta({ meta, idiomas }: { meta: MetaLivreAvaliada; idiomas: Idiom
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className={cn("text-h3", concluida ? "text-texto-2 line-through" : "text-texto")}>
-          {idioma ? <span className="mr-1.5">{idioma.bandeira}</span> : null}
-          {meta.titulo}
-        </p>
+        <div className="min-w-0">
+          {idioma ? <PastilhaIdioma idioma={idioma} compacta className="mb-1" /> : null}
+          <p className={cn("text-h3", concluida ? "text-texto-2 line-through" : "text-texto")}>
+            {meta.titulo}
+          </p>
+        </div>
         {concluida ? (
           <Check className="mt-0.5 size-4 shrink-0 text-sucesso" strokeWidth={3} />
         ) : null}

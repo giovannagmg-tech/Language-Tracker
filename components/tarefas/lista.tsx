@@ -9,6 +9,7 @@ import {
   dispensarTarefa,
   reabrirTarefa,
 } from "@/lib/actions/tarefas";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import { estaAtrasada, podeAdiar, type TarefaLista } from "@/lib/domain/tarefas";
 import type { IdiomaResumo } from "@/lib/queries/hoje";
 import { fmtDataCurta } from "@/lib/formatadores";
@@ -111,9 +112,7 @@ export function ListaTarefasCompleta({ titulo, descricao, tarefas, idiomas, hoje
                   {t.titulo}
                 </span>
 
-                {idioma ? (
-                  <span className="shrink-0 text-pequeno text-texto-2">{idioma.bandeira}</span>
-                ) : null}
+                {idioma ? <PastilhaIdioma idioma={idioma} compacta /> : null}
 
                 {parcial ? (
                   <span className="shrink-0 text-pequeno tabular text-texto-2">

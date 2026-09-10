@@ -84,6 +84,12 @@ Imersão é **sempre cinza**. Nunca recebe cor de destaque, em gráfico nenhum. 
 |---|---|---|---|
 | Inglês | `--idioma-ingles` | `#2F6FED` | `#6C9BF0` |
 | Espanhol | `--idioma-espanhol` | `#C08A12` | mesmo |
+
+> O seed inicial divergiu deste documento e gravou `#E4A11B` no espanhol, que
+> tem contraste 2,23 contra o fundo claro — abaixo dos 3:1 que uma forma precisa,
+> e a barra do espanhol sumia no tema claro. Corrigido nas migrações
+> `20260910020000` (dado existente) e `20260910030000` (contas novas). O
+> documento estava certo; o dado é que foi alinhado a ele.
 | Francês | `--idioma-frances` | `#D14D5A` | `#E5757F` |
 
 ### 1.7 Semânticas e semáforo

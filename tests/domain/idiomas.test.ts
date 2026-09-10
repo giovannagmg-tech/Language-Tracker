@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   bandeiraValida,
+  corConflitante,
   corValida,
   CORES_SUGERIDAS,
+  DISTANCIA_MINIMA,
+  distanciaDeCores,
   proximaCor,
   slugDoIdioma,
   slugLivre,
@@ -89,5 +92,86 @@ describe("próxima cor sugerida", () => {
 
   it("acabaram as cores, volta para a primeira em vez de devolver nada", () => {
     expect(proximaCor([...CORES_SUGERIDAS])).toBe(CORES_SUGERIDAS[0]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// A paleta não pode degradar sem alguém perceber
+// ---------------------------------------------------------------------------
+
+function luminancia(hex: string): number {
+  const c = hex.replace("#", "");
+  const v = [0, 2, 4]
+    .map((i) => parseInt(c.slice(i, i + 2), 16) / 255)
+    .map((x) => (x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)));
+  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+}
+
+function contraste(a: string, b: string): number {
+  const [maior, menor] = [luminancia(a), luminancia(b)].sort((p, q) => q - p);
+  return (maior + 0.05) / (menor + 0.05);
+}
+
+const CLARO = "#FFFFFF";
+const ESCURO = "#0d0f0b";
+
+describe("distância entre cores", () => {
+  it("cor consigo mesma é zero, e maiúscula não importa", () => {
+    expect(distanciaDeCores("#2F6FED", "#2f6fed")).toBe(0);
+  });
+
+  it("dois azuis vizinhos ficam abaixo do limiar", () => {
+    expect(distanciaDeCores("#2F6FED", "#3A76F0")).toBeLessThan(DISTANCIA_MINIMA);
+  });
+
+  it("azul e vermelho ficam bem acima", () => {
+    expect(distanciaDeCores("#2F6FED", "#D14D5A")).toBeGreaterThan(DISTANCIA_MINIMA);
+  });
+
+  it("aceita hexadecimal de três dígitos", () => {
+    expect(distanciaDeCores("#fff", "#ffffff")).toBe(0);
+  });
+});
+
+describe("paleta sugerida", () => {
+  it("toda cor é vista nos dois temas — forma precisa de 3:1", () => {
+    for (const cor of CORES_SUGERIDAS) {
+      expect(contraste(cor, CLARO), `${cor} no tema claro`).toBeGreaterThanOrEqual(3);
+      expect(contraste(cor, ESCURO), `${cor} no tema escuro`).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("nenhum par se confunde", () => {
+    for (let i = 0; i < CORES_SUGERIDAS.length; i += 1) {
+      for (let j = i + 1; j < CORES_SUGERIDAS.length; j += 1) {
+        expect(
+          distanciaDeCores(CORES_SUGERIDAS[i], CORES_SUGERIDAS[j]),
+          `${CORES_SUGERIDAS[i]} × ${CORES_SUGERIDAS[j]}`,
+        ).toBeGreaterThanOrEqual(DISTANCIA_MINIMA);
+      }
+    }
+  });
+
+  it("as três primeiras são as dos idiomas dela, como manda o docs/07", () => {
+    expect(CORES_SUGERIDAS.slice(0, 3)).toEqual(["#2F6FED", "#C08A12", "#D14D5A"]);
+  });
+});
+
+describe("cor conflitante", () => {
+  const existentes = [
+    { nome: "Inglês", cor: "#2F6FED" },
+    { nome: "Francês", cor: "#D14D5A" },
+  ];
+
+  it("acusa a cor parecida, dizendo com quem", () => {
+    expect(corConflitante("#3A76F0", existentes)?.nome).toBe("Inglês");
+  });
+
+  it("deixa passar cor distinguível", () => {
+    expect(corConflitante("#3AA63A", existentes)).toBeNull();
+  });
+
+  it("primeiro idioma da conta nunca conflita", () => {
+    expect(corConflitante("#2F6FED", [])).toBeNull();
   });
 });

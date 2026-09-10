@@ -9,6 +9,7 @@ import {
   registrarAcerto,
   registrarPalavrasNovas,
 } from "@/lib/actions/flashcards";
+import { bordaDoIdioma } from "@/components/ui/idioma";
 import type { FlashcardsDeIdioma } from "@/lib/queries/flashcards";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +66,10 @@ export function PainelIdioma({ dados, hoje }: { dados: FlashcardsDeIdioma; hoje:
   }
 
   return (
-    <section className="rounded-card border border-borda bg-superficie p-6 shadow-card">
+    <section
+      className="rounded-card border border-borda bg-superficie p-6 shadow-card"
+      style={bordaDoIdioma(dados.idioma)}
+    >
       <div className="mb-4 flex items-baseline justify-between gap-3">
         <h2 className="text-h2 text-texto">
           <span className="mr-2">{dados.idioma.bandeira}</span>

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { PastilhaIdioma } from "@/components/ui/idioma";
 import { registrarAtivacao } from "@/lib/actions/flashcards";
 import { marcarPontoErrado, registrarFrasesDoPonto } from "@/lib/actions/revisao";
 import { avancarTarefa } from "@/lib/actions/tarefas";
@@ -82,7 +83,7 @@ export function FilaDeRevisao({ itens, idiomas, hoje, resolvidosNaSemana }: Prop
                 {ROTULO_TIPO[item.tipo]}
               </span>
               <span className="min-w-0 flex-1 text-corpo text-texto">{item.titulo}</span>
-              {idioma ? <span className="shrink-0 text-pequeno">{idioma.bandeira}</span> : null}
+              {idioma ? <PastilhaIdioma idioma={idioma} compacta mostrarNome={false} /> : null}
               <span
                 className={cn(
                   "w-32 shrink-0 text-right text-pequeno",
@@ -158,7 +159,7 @@ export function ListaDePontos({
         return (
           <li key={p.id} className="flex items-center gap-3 py-2.5">
             <span className="min-w-0 flex-1 text-corpo text-texto">{p.titulo}</span>
-            {idioma ? <span className="shrink-0 text-pequeno">{idioma.bandeira}</span> : null}
+            {idioma ? <PastilhaIdioma idioma={idioma} compacta mostrarNome={false} /> : null}
             <button
               type="button"
               onClick={() => alternar(p.id, !errado)}
